@@ -1,0 +1,169 @@
+{
+    "true_reflection": {
+        "name": "True Reflection",
+        "directions": [
+            0,
+            4,
+            3,
+            1,
+            2
+        ]
+    },
+    "false_reflection": {
+        "name": "False Reflection",
+        "directions": [
+            0,
+            2,
+            3,
+            5,
+            4
+        ]
+    },
+    "nullary_reflection": {
+        "name": "Nullary Reflection",
+        "directions": [
+            0,
+            2
+        ]
+    },
+    "vector_reflection_zero": {
+        "name": "Vector Reflection Zero",
+        "directions": [
+            0,
+            5,
+            4,
+            3,
+            2,
+            1
+        ]
+    },
+    "vector_reflection_+x": {
+        "name": "Vector Reflection +X",
+        "directions": [
+            0,
+            5,
+            4,
+            3,
+            2,
+            1,
+            2,
+            0
+        ]
+    },
+    "vector_reflection_-x": {
+        "name": "Vector Reflection -X",
+        "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            4,
+            2
+        ]
+    },
+    "vector_reflection_+y": {
+        "name": "Vector Reflection +Y",
+        "directions": [
+            0,
+            5,
+            4,
+            3,
+            2,
+            1,
+            2,
+            2
+        ]
+    },
+    "vector_reflection_-y": {
+        "name": "Vector Reflection -Y",
+        "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            4,
+            4
+        ]
+    },
+    "vector_reflection_+z": {
+        "name": "Vector Reflection +Z",
+        "directions": [
+            0,
+            5,
+            4,
+            3,
+            2,
+            1,
+            2,
+            4
+        ]
+    },
+    "vector_reflection_-z": {
+        "name": "Vector Reflection -Z",
+        "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            4,
+            0
+        ]
+    },
+    "circle_reflection": {
+        "name": "Circle's Reflection",
+        "directions": [
+            0,
+            1,
+            5,
+            5,
+            3,
+            4
+        ]
+    },
+    "arc_reflection": {
+        "name": "Arc's Reflection",
+        "directions": [
+            0,
+            5,
+            1,
+            1,
+            3,
+            2
+        ]
+    },
+    "euler_reflection": {
+        "name": "Euler's Reflection",
+        "directions": [
+            0,
+            4,
+            2,
+            1
+        ]
+    },
+    "additive_distillation": {
+        "name": "Additive Distillation",
+        "directions": [
+            0,
+            0,
+            4,
+            2,
+            2
+        ]
+    },
+    "subtractive_distillation": {
+        "name": "Subtractive Distillation",
+        "directions": [
+            0,
+            0,
+            2,
+            4,
+            4
+        ]
+    }
+}

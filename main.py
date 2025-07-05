@@ -1,0 +1,254 @@
+import pygame
+from pygame.locals import *
+import math
+import json
+import os
+import spells
+
+
+CIRCLECOLOR = (100, 100, 255)
+LINEDRAWCOLOR = (204, 115, 255)
+LINECASTCOLOR = (66, 224, 245)
+LINEWIDTH = 7
+DEBUGMODE = True
+
+def newspell(currentspells, spelldirections):
+    spellname = input("What is the Spell called?")
+    id = input("What should the Spell ID be?")
+    description = input("What does it do?")
+    currentspells[id] = {
+        "name": spellname,
+        "directions": spelldirections 
+    }
+    with open(f'spells.py', 'a') as f:
+        f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack):\n\tpass\n\n\n')
+        
+def executespell(spellid, currentstack):
+    spellfunction = getattr(spells, spellid)
+    spellfunction(currentstack)
+
+
+
+def generatepoints():
+    points = []
+    y = 0
+    while Game.pointdistance/2+y*math.sqrt(Game.pointdistance**2-(Game.pointdistance/2)**2) < Game.height:
+        x = 0
+        if y%2 == 0:
+            while Game.pointdistance/2+Game.pointdistance*x < Game.width:
+                points.append(Point(y, x))
+                x += 1
+        else:
+            while Game.pointdistance*(x+1) < Game.width:
+                points.append(Point(y, x))
+                x += 1
+        y += 1
+    return points
+
+       
+class Point:
+    def __init__(self, row, column):
+        self.position = (column, row)
+        self.row = row
+        self.column = column
+        self.xpos = Game.pointdistance/4+Game.pointdistance*column if row%2== 0 else Game.pointdistance*3/4+Game.pointdistance*column
+        self.ypos = Game.pointdistance/4+row*math.sqrt(Game.pointdistance**2-(Game.pointdistance/2)**2)
+
+    def draw(self, surface):
+        pygame.draw.circle(surface, CIRCLECOLOR, [self.xpos, self.ypos], 5)
+
+    def get(points, row, column):
+        for point in points:
+            if point.row == row and point.column == column:
+                return Point
+        return None
+
+    def gethovered(points, mousex, mousey):
+        for point in points:
+            if math.sqrt((point.xpos - mousex)**2 + (point.ypos - mousey)**2) < 20:
+                return point
+
+    def isadjacent(point1, point2):
+        x1 = point1.column
+        y1 = point1.row
+        x2 = point2.column
+        y2 = point2.row
+        if abs(y1 - y2) == 1: #above to each other
+            if (    y1%2 == 0 and x1 - x2 == 1
+                 or y1%2 == 1 and x1 - x2 == -1
+                 or x1 == x2
+              ):
+                return True
+        elif y1 == y2 and abs(x1 - x2) == 1:
+                return True
+        return False
+
+
+
+class Connection:
+    def __init__(self, startpoint, endpoint):
+        self.startpoint = startpoint
+        self.endpoint = endpoint
+        self.startpos = self.startx, self.starty = startpoint.xpos, startpoint.ypos
+        self.endpos = self.endx, self.endy = endpoint.xpos, endpoint.ypos
+        self.state = "Drawing"
+        self.direction = 0
+        strow = startpoint.row
+        stcol = startpoint.column
+        enrow = endpoint.row
+        encol = endpoint.column
+        if strow == enrow:
+            if encol - stcol == 1:
+                self.direction = 0
+            else:
+                self.direction = 3
+        elif strow%2 == 0:
+            if enrow > strow:
+                if encol == stcol:
+                    self.direction = 1
+                else:
+                    self.direction = 2
+            else:
+                if encol == stcol:
+                    self.direction = 5
+                else:
+                    self.direction = 4
+        else:
+            if enrow > strow:
+                if encol == stcol:
+                    self.direction = 2
+                else:
+                    self.direction = 1
+            else:
+                if encol == stcol:
+                    self.direction = 4
+                else:
+                    self.direction = 5
+
+    def draw(self, surface):
+        if self.state == "Drawing":
+            color = LINEDRAWCOLOR
+        elif self.state == "Cast":
+            color = LINECASTCOLOR
+        pygame.draw.line(surface, color, self.startpos, self.endpos, width=LINEWIDTH) 
+
+
+    def exists(connections, startpoint, endpoint):
+        for connection in connections:
+            if (    connection.startpoint == startpoint and connection.endpoint == endpoint 
+                 or connection.endpoint == startpoint and connection.startpoint == endpoint
+               ):
+                return connection
+
+    def isbacktrack(connections, currentpoint, newpoint):
+        if len(connections) == 0:
+            return False
+        lastconnect = connections[-1]
+        if lastconnect.startpoint == newpoint and lastconnect.endpoint == currentpoint:
+            return True
+
+
+class App:
+    def __init__(self):
+        self._running = True
+        self._display_surf = None
+ 
+    def on_init(self):
+        pygame.init()
+        self._display_surf = pygame.display.set_mode((0,0))
+        self.size = self.width, self.height = self._display_surf.get_size()
+        self._running = True
+        self.state = "Idle"
+        self.pointdistance = self.height//11
+        self.points = generatepoints()
+        self.currentpoint = None
+        self.connections = []
+        print("loading spells")
+        with open("spells.json", "r") as f:
+            self.spells = json.load(f)
+        self.currentstack = []
+ 
+    def on_event(self, event):
+        if event.type == pygame.QUIT:
+            self._running = False
+            with open("spells.json", "w") as f:
+                f.write(json.dumps(self.spells, indent=4))
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mousex, mousey = event.pos
+            if event.button == 1 and self.state == "Idle" and Point.gethovered(self.points, mousex, mousey):
+                self.state = "Casting"
+                self.currentpoint = Point.gethovered(self.points, mousex, mousey)
+
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1 and self.state == "Casting":
+                currentspell = []
+                for connection in self.connections:
+                    if connection.state == "Drawing":
+                        connection.state = "Cast"
+                        currentspell.append(connection.direction)
+                if len(currentspell) > 0:
+                    offset = currentspell[0]
+                    currentspell = [(direction-offset)%6 for direction in currentspell]
+                    validspell = False
+                    for spell in self.spells:
+                        if self.spells[spell]["directions"] == currentspell:
+                            validspell = True
+                            print(f"Cast {self.spells[spell]['name']}!")
+                            executespell(spell, self.currentstack)
+                            print(self.currentstack)
+                    if not validspell and DEBUGMODE:
+                        newspell(self.spells, currentspell)
+                        self.connections = []
+                self.state = "Idle"
+
+        elif event.type == pygame.MOUSEMOTION:
+            mousex, mousey = event.pos
+            if self.state == "Casting":
+                newpoint = Point.gethovered(self.points, mousex, mousey)
+                if newpoint != self.currentpoint and newpoint != None:
+                    if Point.isadjacent(self.currentpoint, newpoint):
+                        if Connection.isbacktrack(self.connections, self.currentpoint, newpoint):
+                            self.connections.pop()
+                            self.currentpoint = newpoint
+                        elif not Connection.exists(self.connections, self.currentpoint, newpoint):
+                            self.connections.append(Connection(self.currentpoint, newpoint))
+                            self.currentpoint = newpoint
+
+                
+
+            
+    def on_loop(self):
+        mousex, mousey = pygame.mouse.get_pos()
+        #print(Point.gethovered(self.points, mousex, mousey))
+    def on_render(self):
+        self._display_surf.fill((0, 0, 0))
+        mousex, mousey = pygame.mouse.get_pos()
+        if self.currentpoint != None and self.state == "Casting":
+            pygame.draw.line(self._display_surf, LINEDRAWCOLOR, (self.currentpoint.xpos, self.currentpoint.ypos), (mousex, mousey), width=7)
+        
+        for point in self.points:
+            point.draw(self._display_surf)
+        for connection in self.connections:
+            connection.draw(self._display_surf)
+        
+        pygame.display.update()
+    def on_cleanup(self):
+        pygame.quit()
+ 
+    def on_execute(self):
+        if self.on_init() == False:
+            self._running = False
+ 
+        while( self._running ):
+            for event in pygame.event.get():
+                self.on_event(event)
+            self.on_loop()
+            self.on_render()
+        self.on_cleanup()
+
+
+if __name__ == "__main__" :
+    Game = App()
+    Game.on_execute()
+    
+
