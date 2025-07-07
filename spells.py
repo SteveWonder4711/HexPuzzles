@@ -119,15 +119,58 @@ def subtractive_distillation(currentstack):
 	else:
 	    print(f"spell not able to handle types {atype} and {btype}!")
 
-#DEBUG Number
-#number thingy
-def debug_num(currentstack):
+
+#Multiplicative Distillation
+#Perform multiplication or the dot product.
+def multiplicative_distillation(currentstack):
 	pass
 
 
-#DEBUG nNumber
-#negative number thingy
-def debug_nnum(currentstack):
+#Division Distillation
+#Perform division or the cross product.
+def division_distillation(currentstack):
+	pass
+
+
+#Length Purification
+#Compute the absolute value or length.
+def length_purification(currentstack):
+	pass
+
+
+#Power Distillation
+#Perform exponentiation or vector projection.
+def power_distillation(currentstack):
+	pass
+
+
+#Floor Purification
+#"Floors" a number, cutting off the fractional component and leaving an integer value. If passed a vector, instead floors each of its components.
+def floor_purification(currentstack):
+	pass
+
+
+#Ceiling Purification
+#"Ceilings" a number, raising it to the next integer value if it has a fractional componen. If passed a vector, instead ceils each of its components.
+def ceiling_purification(currentstack):
+	pass
+
+
+#Vector Exaltation
+#Combine three numbers at the top of the stack into a vector's X, Y, and Z components (bottom to top).
+def vector_exaltation(currentstack):
+	pass
+
+
+#Vector Disintegration
+#Split a vector into its X, Y, and Z components (bottom to top).
+def vector_disintegration(currentstack):
+	pass
+
+
+#Modulus Distillation
+#Takes the modulus of two numbers.
+def modulus_distillation(currentstack):
 	pass
 
 

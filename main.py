@@ -11,7 +11,7 @@ LINEDRAWCOLOR = (204, 115, 255)
 LINECASTCOLOR = (66, 224, 245)
 LINEERRORCOLOR = (255, 0, 0)
 LINEWIDTH = 7
-ADDSPELLMODE = False
+ADDSPELLMODE = True
 
 
 def eval_numerical_reflection(directions, startdirection):
@@ -87,13 +87,16 @@ def check_bookkeeper_gambit(directions, currentstack):
 
 
 
-def newspell(currentspells, spelldirections):
+def newspell(currentspells, spelldirections, offset):
     spellname = input("What is the Spell called?")
     id = input("What should the Spell ID be?")
+    if id == "":
+        id = spellname.lower().replace(" ", "_")
     description = input("What does it do?")
     currentspells[id] = {
         "name": spellname,
-        "directions": spelldirections 
+        "directions": spelldirections,
+        "offset": offset
     }
     with open(f'spells.py', 'a') as f:
         f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack):\n\tpass\n\n\n')
@@ -280,7 +283,7 @@ class App:
                                     print(self.currentstack)
                     if not validspell or self.spellerror:
                         if ADDSPELLMODE and not self.spellerror:
-                            newspell(self.spells, currentspell)
+                            newspell(self.spells, currentspell, offset)
                             self.connections = []
                         else:
                             print("there was an error or it was a wrong spell :<")
