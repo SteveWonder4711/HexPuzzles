@@ -37,7 +37,7 @@
             1
         ]
     },
-    "vector_reflection_+x": {
+    "vector_reflection_px": {
         "name": "Vector Reflection +X",
         "directions": [
             0,
@@ -50,7 +50,7 @@
             0
         ]
     },
-    "vector_reflection_-x": {
+    "vector_reflection_nx": {
         "name": "Vector Reflection -X",
         "directions": [
             0,
@@ -63,7 +63,7 @@
             2
         ]
     },
-    "vector_reflection_+y": {
+    "vector_reflection_py": {
         "name": "Vector Reflection +Y",
         "directions": [
             0,
@@ -76,7 +76,7 @@
             2
         ]
     },
-    "vector_reflection_-y": {
+    "vector_reflection_ny": {
         "name": "Vector Reflection -Y",
         "directions": [
             0,
@@ -89,7 +89,7 @@
             4
         ]
     },
-    "vector_reflection_+z": {
+    "vector_reflection_pz": {
         "name": "Vector Reflection +Z",
         "directions": [
             0,
@@ -102,7 +102,7 @@
             4
         ]
     },
-    "vector_reflection_-z": {
+    "vector_reflection_nz": {
         "name": "Vector Reflection -Z",
         "directions": [
             0,
@@ -164,6 +164,26 @@
             2,
             4,
             4
+        ]
+    },
+    "debug_num": {
+        "name": "DEBUG Number",
+        "directions": [
+            0,
+            4,
+            3,
+            1,
+            5
+        ]
+    },
+    "debug_nnum": {
+        "name": "DEBUG nNumber",
+        "directions": [
+            0,
+            2,
+            3,
+            5,
+            1
         ]
     }
 }

@@ -12,6 +12,43 @@ LINECASTCOLOR = (66, 224, 245)
 LINEWIDTH = 7
 DEBUGMODE = True
 
+
+def eval_numerical_reflection(directions, startdirection):
+    num = 0
+    currentdirection = startdirection
+    for direction in directions:
+        angle = (direction - currentdirection) % 6
+        currentdirection = direction
+        if angle == 0:
+            num += 1
+        elif angle == 1:
+            num += 10
+        elif angle == 2:
+            num /= 2
+        elif angle == 4:
+            num *= 2
+        elif angle == 5:
+            num += 5
+    return num
+        
+
+def check_numerical_reflection(directions, currentstack):
+    print("yeah this might be a numerical reflection!!!")
+    if directions[0:5] == [0,4,3,1,5]:      
+        num_directions = directions[5:]
+        currentstack.append(eval_numerical_reflection(num_directions, 5))
+        print(currentstack)
+        return True
+    elif directions[0:5] == [0,2,3,5,1]:
+        num_directions = directions[5:]
+        currentstack.append(-1*eval_numerical_reflection(num_directions, 1))
+        print(currentstack)
+        return True
+    print("nvm!!!")
+    return False
+
+
+
 def newspell(currentspells, spelldirections):
     spellname = input("What is the Spell called?")
     id = input("What should the Spell ID be?")
@@ -22,7 +59,8 @@ def newspell(currentspells, spelldirections):
     }
     with open(f'spells.py', 'a') as f:
         f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack):\n\tpass\n\n\n')
-        
+
+
 def executespell(spellid, currentstack):
     spellfunction = getattr(spells, spellid)
     spellfunction(currentstack)
@@ -189,16 +227,17 @@ class App:
                 if len(currentspell) > 0:
                     offset = currentspell[0]
                     currentspell = [(direction-offset)%6 for direction in currentspell]
-                    validspell = False
-                    for spell in self.spells:
-                        if self.spells[spell]["directions"] == currentspell:
-                            validspell = True
-                            print(f"Cast {self.spells[spell]['name']}!")
-                            executespell(spell, self.currentstack)
-                            print(self.currentstack)
-                    if not validspell and DEBUGMODE:
-                        newspell(self.spells, currentspell)
-                        self.connections = []
+                    if not check_numerical_reflection(currentspell, self.currentstack):
+                        validspell = False
+                        for spell in self.spells:
+                            if self.spells[spell]["directions"] == currentspell:
+                                validspell = True
+                                print(f"Cast {self.spells[spell]['name']}!")
+                                executespell(spell, self.currentstack)
+                                print(self.currentstack)
+                        if not validspell and DEBUGMODE:
+                            newspell(self.spells, currentspell)
+                            self.connections = []
                 self.state = "Idle"
 
         elif event.type == pygame.MOUSEMOTION:

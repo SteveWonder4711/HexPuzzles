@@ -1,5 +1,6 @@
 import math
 
+
 #True Reflection
 #Adds True to the top of the stack
 def true_reflection(currentstack):
@@ -87,13 +88,46 @@ def euler_reflection(currentstack):
 #Performs Addition
 def additive_distillation(currentstack):
 	a = currentstack.pop()
+	atype = type(a)
 	b = currentstack.pop()
-	currentstack.append(a+b)
+	btype = type(b)
+	if atype in [int, float] and btype in [int,float]:
+	    currentstack.append(a+b)
+	elif atype in [int,float] and btype == tuple:
+	    currentstack.append(tuple([value+a for value in b]))
+	elif atype == tuple and btype in [int,float]:
+	    currentstack.append(tuple([value+b for value in b]))
+	elif atype == tuple and btype == tuple:
+	    currentstack.append(tuple([a[i]+b[i] for i in range(3)]))
+	else:
+	    print(f"spell not able to handle types {atype} and {btype}!")
+	
 
 #Subtractive Distillation
 #Performs Subtraction
 def subtractive_distillation(currentstack):
 	a = currentstack.pop()
+	atype = type(a)
 	b = currentstack.pop()
-	currentstack.append(b-a)
+	btype = type(b)
+	if atype in [int, float] and btype in [int,float]:
+	    currentstack.append(b-a)
+	elif atype in [int,float] and btype == tuple:
+	    currentstack.append(tuple([value-a for value in b]))
+	elif atype == tuple and btype == tuple:
+	    currentstack.append(tuple([b[i]-a[i] for i in range(3)]))
+	else:
+	    print(f"spell not able to handle types {atype} and {btype}!")
+
+#DEBUG Number
+#number thingy
+def debug_num(currentstack):
+	pass
+
+
+#DEBUG nNumber
+#negative number thingy
+def debug_nnum(currentstack):
+	pass
+
 
