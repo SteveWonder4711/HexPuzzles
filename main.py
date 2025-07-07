@@ -9,8 +9,9 @@ import spells
 CIRCLECOLOR = (100, 100, 255)
 LINEDRAWCOLOR = (204, 115, 255)
 LINECASTCOLOR = (66, 224, 245)
+LINEERRORCOLOR = (255, 0, 0)
 LINEWIDTH = 7
-DEBUGMODE = True
+ADDSPELLMODE = False
 
 
 def eval_numerical_reflection(directions, startdirection):
@@ -46,6 +47,43 @@ def check_numerical_reflection(directions, currentstack):
         return True
     print("nvm!!!")
     return False
+
+
+def check_bookkeeper_gambit(directions, currentstack):
+    print("hmmm maybe this is bookkeepers gambit then")
+    print(directions)
+    bookkeeper = []
+    if directions[:2] == [0, 4]:
+        bookkeeper.append(0)
+        i = 2
+        while i < len(directions):
+            if directions[i] == 5:
+                i += 1
+                bookkeeper.append(1)
+            elif directions[i:i+2] == [0, 4]:
+                i += 2
+                bookkeeper.append(0)
+            else:
+                return False
+    elif directions[0] == 0:
+        bookkeeper.append(1)
+        i = 1
+        while i < len(directions):
+            if directions[i] == 0:
+                i += 1
+                bookkeeper.append(1)
+            elif directions[i:i+2] == [1, 5]:
+                i += 2
+                bookkeeper.append(0)
+            else:
+                return False
+    
+    if len(bookkeeper) > len(currentstack):
+        Game.spellerror = True
+        return True
+    print(bookkeeper)
+    return True
+
 
 
 
@@ -168,6 +206,8 @@ class Connection:
             color = LINEDRAWCOLOR
         elif self.state == "Cast":
             color = LINECASTCOLOR
+        elif self.state == "Error":
+            color = LINEERRORCOLOR
         pygame.draw.line(surface, color, self.startpos, self.endpos, width=LINEWIDTH) 
 
 
@@ -205,6 +245,7 @@ class App:
         with open("spells.json", "r") as f:
             self.spells = json.load(f)
         self.currentstack = []
+        self.spellerror = False
  
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -218,26 +259,42 @@ class App:
                 self.currentpoint = Point.gethovered(self.points, mousex, mousey)
 
         elif event.type == pygame.MOUSEBUTTONUP:
+            self.spellerror = False
             if event.button == 1 and self.state == "Casting":
                 currentspell = []
                 for connection in self.connections:
                     if connection.state == "Drawing":
-                        connection.state = "Cast"
                         currentspell.append(connection.direction)
                 if len(currentspell) > 0:
                     offset = currentspell[0]
                     currentspell = [(direction-offset)%6 for direction in currentspell]
+                    validspell = True
                     if not check_numerical_reflection(currentspell, self.currentstack):
-                        validspell = False
-                        for spell in self.spells:
-                            if self.spells[spell]["directions"] == currentspell:
-                                validspell = True
-                                print(f"Cast {self.spells[spell]['name']}!")
-                                executespell(spell, self.currentstack)
-                                print(self.currentstack)
-                        if not validspell and DEBUGMODE:
+                        if not check_bookkeeper_gambit(currentspell, self.currentstack):
+                            validspell = False
+                            for spell in self.spells:
+                                if self.spells[spell]["directions"] == currentspell:
+                                    validspell = True
+                                    print(f"Cast {self.spells[spell]['name']}!")
+                                    executespell(spell, self.currentstack)
+                                    print(self.currentstack)
+                    if not validspell or self.spellerror:
+                        if ADDSPELLMODE and not self.spellerror:
                             newspell(self.spells, currentspell)
                             self.connections = []
+                        else:
+                            print("there was an error or it was a wrong spell :<")
+                            for connection in self.connections:
+                                if connection.state == "Drawing":
+                                    connection.state = "Error"
+                    else:
+                        print("looks like spell worked :3")
+                        for connection in self.connections:
+                                if connection.state == "Drawing":
+                                    connection.state = "Cast"      
+
+
+                                
                 self.state = "Idle"
 
         elif event.type == pygame.MOUSEMOTION:
