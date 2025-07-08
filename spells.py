@@ -171,7 +171,8 @@ def length_purification(currentstack):
         currentstack.append(abs(num))
     elif numtype == tuple:
         currentstack.append(math.sqrt(sum([x**2 for x in num])))
-
+    else:
+        print(f"spell not able to handle type {numtype}!")
 
 #Power Distillation
 #Perform exponentiation or vector projection.
@@ -189,19 +190,34 @@ def power_distillation(currentstack):
         v = np.array(a)
         v_norm = np.sqrt(sum(v**2))
         currentstack.append(tuple((np.dot(u, v)/v_norm**2)*v))
+    else:
+        print(f"spell not able to handle types {atype} and {btype}!")
 
 
 
 #Floor Purification
 #"Floors" a number, cutting off the fractional component and leaving an integer value. If passed a vector, instead floors each of its components.
 def floor_purification(currentstack):
-	pass
-
+    num = currentstack.pop()
+    numtype = type(num)
+    if numtype in [int,float]:
+        currentstack.append(math.floor(num))
+    elif numtype == tuple:
+        currentstack.append(tuple([math.floor(element) for element in num]))
+    else:
+        print(f"spell not able to handle type {numtype}!")
 
 #Ceiling Purification
 #"Ceilings" a number, raising it to the next integer value if it has a fractional componen. If passed a vector, instead ceils each of its components.
 def ceiling_purification(currentstack):
-	pass
+    num = currentstack.pop()
+    numtype = type(num)
+    if numtype in [int,float]:
+        currentstack.append(math.ceil(num))
+    elif numtype == tuple:
+        currentstack.append(tuple([math.ceil(element) for element in num]))
+    else:
+        print(f"spell not able to handle type {numtype}!")
 
 
 #Vector Exaltation

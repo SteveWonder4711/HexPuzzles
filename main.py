@@ -34,24 +34,18 @@ def eval_numerical_reflection(directions, startdirection):
         
 
 def check_numerical_reflection(directions, currentstack):
-    print("yeah this might be a numerical reflection!!!")
     if directions[0:5] == [0,4,3,1,5]:      
         num_directions = directions[5:]
         currentstack.append(eval_numerical_reflection(num_directions, 5))
-        print(currentstack)
         return True
     elif directions[0:5] == [0,2,3,5,1]:
         num_directions = directions[5:]
         currentstack.append(-1*eval_numerical_reflection(num_directions, 1))
-        print(currentstack)
         return True
-    print("nvm!!!")
     return False
 
 
 def check_bookkeeper_gambit(directions, currentstack):
-    print("hmmm maybe this is bookkeepers gambit then")
-    print(directions)
     bookkeeper = []
     if directions[:2] == [0, 4]:
         bookkeeper.append(0)
@@ -81,7 +75,12 @@ def check_bookkeeper_gambit(directions, currentstack):
     if len(bookkeeper) > len(currentstack):
         Game.spellerror = True
         return True
-    print(bookkeeper)
+    newstack = currentstack[:-len(bookkeeper)]
+    affected = currentstack[-len(bookkeeper):]
+    for i in range(len(bookkeeper)):
+        if bookkeeper[i] == 1:
+            newstack.append(affected[i])
+    
     return True
 
 
@@ -299,9 +298,7 @@ class App:
                             for spell in self.spells:
                                 if self.spells[spell]["directions"] == currentspell:
                                     validspell = True
-                                    print(f"Cast {self.spells[spell]['name']}!")
                                     executespell(spell, self.currentstack)
-                                    print(self.currentstack)
                     if not validspell or self.spellerror:
                         if ADDSPELLMODE and not self.spellerror:
                             newspell(self.spells, currentspell, offset)
@@ -312,7 +309,6 @@ class App:
                                 if connection.state == "Drawing":
                                     connection.state = "Error"
                     else:
-                        print("looks like spell worked :3")
                         for connection in self.connections:
                                 if connection.state == "Drawing":
                                     connection.state = "Cast"      
@@ -339,7 +335,6 @@ class App:
             
     def on_loop(self):
         mousex, mousey = pygame.mouse.get_pos()
-        #print(Point.gethovered(self.points, mousex, mousey))
     def on_render(self):
         self._display_surf.fill((0, 0, 0))
         mousex, mousey = pygame.mouse.get_pos()
