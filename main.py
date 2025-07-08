@@ -99,6 +99,8 @@ def iotatostring(iota):
         if iota == "ERROR":
             return "".join(random.choices("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!§$%&/()=?\\ß*+-#'_.:,;", k=20))
         return ""
+    elif iota is None:
+        return "Null"
     else:
         return ""
 
