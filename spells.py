@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import copy
 
 #True Reflection
 #Adds True to the top of the stack
@@ -16,7 +17,7 @@ def false_reflection(currentstack):
 #Nullary Reflection
 #Adds Null to the top of the stack
 def nullary_reflection(currentstack):
-	currentstack.append(Null)
+	currentstack.append(None)
 
 
 #Vector Reflection Zero
@@ -102,6 +103,7 @@ def additive_distillation(currentstack):
     elif atype == list and btype == list:
         for element in a:
             b.append(element)
+        currentstack.append(b)
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
 	
@@ -317,13 +319,13 @@ def rotation_gambit_ii(currentstack):
 #Gemini Decomposition
 #Duplicates the top iota
 def gemini_decomposition(currentstack):
-    currentstack.append(currentstack[-1])	
+    currentstack.append(copy.deepcopy(currentstack[-1]))	
 
 
 #Prospector's Gambit
 #Copy the second-to-last iota to the top
 def prospectors_gambit(currentstack):
-	currentstack.append(currentstack[-2])
+	currentstack.append(copy.deepcopy(currentstack[-2]))
 
 
 #Undertaker's Gambit
@@ -333,7 +335,7 @@ def undertakers_gambit(currentstack):
 	b = currentstack.pop()
 	currentstack.append(a)
 	currentstack.append(b)
-	currentstack.append(a)
+	currentstack.append(copy.deepcopy(a))
 
 
 #Gemini Gambit
@@ -345,14 +347,14 @@ def gemini_gambit(currentstack):
         print("this spell needs a number at the top of the stack")
         return
     for _ in range(num):
-        currentstack.append(item)
+        currentstack.append(copy.deepcopy(item))
 
 
 #Dioscuri Gambit
 #Copy the top two iotas of the stack
 def dioscuri_gambit(currentstack):
-	currentstack.append(currentstack[-2])
-	currentstack.append(currentstack[-2])
+	currentstack.append(copy.deepcopy(currentstack[-2]))
+	currentstack.append(copy.deepcopy(currentstack[-2]))
 
 
 #Flock's Reflection
@@ -369,7 +371,7 @@ def fishermans_gambit(currentstack):
         print("this spell needs a number at the top of the stack")
         return
     if num >= 0:
-        item = currentstack[-num]
+        item = copy.deepcopy(currentstack[-num])
         del currentstack[-num]
         currentstack.append(item)
     else:
@@ -386,10 +388,10 @@ def fishermans_gambit_ii(currentstack):
         return
     if num >= 0:
         item = currentstack[-num-1]
-        currentstack.append(item)
+        currentstack.append(copy.deepcopy(item))
     else:
         item = currentstack[-1]
-        currentstack.insert(len(currentstack)+num-1, item)
+        currentstack.insert(len(currentstack)+num-1, copy.deepcopy(item))
 
 
 #Swindler's Gambit
@@ -679,6 +681,7 @@ def flocks_gambit(currentstack):
     outlist = []
     for _ in range(num):
         outlist.append(currentstack.pop())
+    outlist.reverse()
     currentstack.append(outlist)
 
 

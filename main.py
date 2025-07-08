@@ -10,7 +10,7 @@ LINEDRAWCOLOR = (204, 115, 255)
 LINECASTCOLOR = (66, 224, 245)
 LINEERRORCOLOR = (255, 0, 0)
 LINEWIDTH = 7
-ADDSPELLMODE = True
+ADDSPELLMODE = False
 
 
 def eval_numerical_reflection(directions, startdirection):
@@ -82,22 +82,32 @@ def check_bookkeeper_gambit(directions, currentstack):
     Game.currentstack = newstack 
     return True
 
+def iotatostring(iota):
+    if type(iota) in [int,float,bool]:
+        return str(iota)
+    elif type(iota) == tuple: 
+        return "({}, {}, {})".format(*[math.floor(element*1000)/1000 for element in list(iota)])
+    elif type(iota) == list:
+        string = "["
+        
+        for i in range(len(iota)):
+            string += iotatostring(iota[i])
+            string += ", " if i != len(iota)-1 else "]"
+        return string
+        
+    else:
+        return ""
+
 
 def drawstack(currentstack, gamesurface, stacksurface):
-    dimensions = width, height = stacksurface.get_size()
     stacksurface.fill((0, 0, 0, 0))
     stacksurface.fill((0, 0, 0, 100))
     i = len(currentstack)-1
     while i >= 0 and i > len(currentstack)-20:
-        if type(currentstack[i]) in [int,float,bool]:
-            string = str(currentstack[i])
-        elif type(currentstack[i]) == tuple: 
-            string = "({}, {}, {})".format(*[math.floor(element*1000)/1000 for element in list(currentstack[i])])
-        else:
-            string = ""
+        string = iotatostring(currentstack[i])
         text = Game.font.render(string, False, LINEDRAWCOLOR)
         textRect = text.get_rect()
-        textRect.center = (min(textRect.width//2, width/2), textRect.height*(len(currentstack)-i-0.5))
+        textRect.center = (textRect.width//2, round(textRect.height*(len(currentstack)-i-0.5)))
         stacksurface.blit(text, textRect)
         i -= 1
     gamesurface.blit(stacksurface, (0, 0))
