@@ -2,7 +2,6 @@ import pygame
 from pygame.locals import *
 import math
 import json
-import os
 import spells
 
 
@@ -94,6 +93,8 @@ def drawstack(currentstack, gamesurface, stacksurface):
             string = str(currentstack[i])
         elif type(currentstack[i]) == tuple: 
             string = "({}, {}, {})".format(*["{:.3f}".format(element) if type(element) == float else element for element in list(currentstack[i])])
+        else:
+            string = ""
         text = Game.font.render(string, False, LINEDRAWCOLOR)
         textRect = text.get_rect()
         textRect.center = (min(textRect.width//2, width/2), textRect.height*(len(currentstack)-i-0.5))
@@ -229,6 +230,8 @@ class Connection:
             color = LINECASTCOLOR
         elif self.state == "Error":
             color = LINEERRORCOLOR
+        else:
+            color = (150, 150, 150)
         pygame.draw.line(surface, color, self.startpos, self.endpos, width=LINEWIDTH) 
 
 
