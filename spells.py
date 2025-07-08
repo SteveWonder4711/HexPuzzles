@@ -171,6 +171,8 @@ def length_purification(currentstack):
         currentstack.append(abs(num))
     elif numtype == tuple:
         currentstack.append(math.sqrt(sum([x**2 for x in num])))
+    elif numtype == bool:
+        currentstack.append(1 if num else 0)
     else:
         print(f"spell not able to handle type {numtype}!")
 
@@ -336,9 +338,9 @@ def gemini_gambit(currentstack):
     item = currentstack.pop()
     if type(num) != int:
         print("this spell needs a number at the top of the stack")
-    else:
-        for i in range(num):
-            currentstack.append(item)
+        return
+    for i in range(num):
+        currentstack.append(item)
 
 
 #Dioscuri Gambit
@@ -360,14 +362,14 @@ def fishermans_gambit(currentstack):
     num = currentstack.pop()
     if type(num) != int:
         print("this spell needs a number at the top of the stack")
+        return
+    if num >= 0:
+        item = currentstack[-num]
+        del currentstack[-num]
+        currentstack.append(item)
     else:
-        if num >= 0:
-            item = currentstack[-num]
-            del currentstack[-num]
-            currentstack.append(item)
-        else:
-            item = currentstack.pop()
-            currentstack.insert(len(currentstack)+num, item)
+        item = currentstack.pop()
+        currentstack.insert(len(currentstack)+num, item)
 
 
 #Fisherman's Gambit II
@@ -376,13 +378,13 @@ def fishermans_gambit_ii(currentstack):
     num = currentstack.pop()
     if type(num) != int:
         print("this spell needs a number at the top of the stack")
+        return
+    if num >= 0:
+        item = currentstack[-num-1]
+        currentstack.append(item)
     else:
-        if num >= 0:
-            item = currentstack[-num-1]
-            currentstack.append(item)
-        else:
-            item = currentstack[-1]
-            currentstack.insert(len(currentstack)+num-1, item)
+        item = currentstack[-1]
+        currentstack.insert(len(currentstack)+num-1, item)
 
 
 #Swindler's Gambit
@@ -420,5 +422,137 @@ def swindlers_gambit(currentstack):
         currentstack.append(element)
 
 	
+
+
+#Augurs Purification
+#Convert an argument to a boolean: 0, None and False become False, everything else becomes True
+def augurs_purification(currentstack):
+    argument = currentstack.pop()
+    if argument in [0, None, False]:
+        currentstack.append(False)
+    else:
+        currentstack.append(True)
+
+
+#Negation Purification
+#Inverts the boolean argument
+def negation_purification(currentstack):
+    argument = currentstack.pop()
+    if type(argument) != bool:
+        print("argument needs to be bool!")
+        return
+    currentstack.append(False if argument else True)
+
+
+#Disjunction Distillation
+#Performs boolean OR
+def disjunction_distillation(currentstack):
+    a = currentstack.pop()
+    b = currentstack.pop()
+    if type(a) != bool or type(b) != bool:
+        print("both arguments need to be booleans")
+        return
+    currentstack.append(True if a or b else False)
+
+
+
+#Conjunction Distillation
+#Performs boolean AND
+def conjunction_distillation(currentstack):
+    a = currentstack.pop()
+    b = currentstack.pop()
+    if type(a) != bool or type(b) != bool:
+        print("both arguments need to be booleans")
+        return
+    currentstack.append(True if a and b else False)
+
+
+#Exclusion Distillation
+#Performs boolean XOR
+def exclusion_distillation(currentstack):
+    a = currentstack.pop()
+    b = currentstack.pop()
+    if type(a) != bool or type(b) != bool:
+        print("both arguments need to be booleans")
+        return
+    currentstack.append(True if (a ^ b) else False)
+
+
+#Augur's Exaltation
+#If the first argument is True, keep the second and discard the third. Otherwise vice versa
+def augurs_exaltation(currentstack):
+    sel = currentstack.pop()
+    if type(sel) != bool:
+        print("needs a boolean value as selector")
+        return
+    if sel:
+        del currentstack[-2]
+    else:
+        del currentstack[-1]
+
+
+#Equality Distillation
+#If the first two arguments are equal, return True, otherwise False
+def equality_distillation(currentstack):
+    a = currentstack.pop()
+    b = currentstack.pop()
+    currentstack.append(a == b)
+
+
+#Inequality Distillation
+#If the first two arguments are not equal, return True, otherwise False
+def inequality_distillation(currentstack):
+    a = currentstack.pop()
+    b = currentstack.pop()
+    currentstack.append(a != b)
+
+
+
+#Maximus Distillation
+#If the first argument is greater than the second, return True, otherwise False
+def maximus_distillation(currentstack):
+    a = currentstack.pop()
+    b = currentstack.pop()
+    if type(a) not in [int,float] or type(b) not in [int,float]:
+        print("needs two numbers")
+        return
+    else:
+        currentstack.append(b>a)
+
+
+#Minimus Distillation
+#If the first argument is lesser than the second, return True, otherwise False
+def minimus_distillation(currentstack):
+    a = currentstack.pop()
+    b = currentstack.pop()
+    if type(a) not in [int,float] or type(b) not in [int,float]:
+        print("needs two numbers")
+        return
+    else:
+        currentstack.append(b<a)
+
+
+#Maximus Distillation II
+#If the first argument is greater or equal to the second, return True, otherwise False
+def maximus_distillation_ii(currentstack):
+    a = currentstack.pop()
+    b = currentstack.pop()
+    if type(a) not in [int,float] or type(b) not in [int,float]:
+        print("needs two numbers")
+        return
+    else:
+        currentstack.append(b>=a)
+
+
+#Minimus Distillation II
+#If the first argument is lenn or equal to the second, return True, otherwise False
+def minimus_distillation_ii(currentstack):
+    a = currentstack.pop()
+    b = currentstack.pop()
+    if type(a) not in [int,float] or type(b) not in [int,float]:
+        print("needs two numbers")
+        return
+    else:
+        currentstack.append(b<=a)
 
 

@@ -93,7 +93,7 @@ def drawstack(currentstack, gamesurface, stacksurface):
         if type(currentstack[i]) in [int,float]:
             string = str(currentstack[i])
         elif type(currentstack[i]) == tuple: 
-            string = "({}, {}, {})".format(*["{:.3f}".format(element) if type(element) == float else element for element in list(currentstack[i])])
+            string = "({}, {}, {})".format(*[math.floor(element*1000)/1000 for element in list(currentstack[i])])
         text = Game.font.render(string, False, LINEDRAWCOLOR)
         textRect = text.get_rect()
         textRect.center = (min(textRect.width//2, width/2), textRect.height*(len(currentstack)-i-0.5))
@@ -162,7 +162,7 @@ class Point:
 
     def gethovered(points, mousex, mousey):
         for point in points:
-            if math.sqrt((point.xpos - mousex)**2 + (point.ypos - mousey)**2) < 20:
+            if math.sqrt((point.xpos - mousex)**2 + (point.ypos - mousey)**2) < Game.pointdistance*0.4:
                 return point
 
     def isadjacent(point1, point2):
@@ -254,7 +254,10 @@ class App:
  
     def on_init(self):
         pygame.init()
-        self._display_surf = pygame.display.set_mode((0,0))
+        if ADDSPELLMODE:
+            self._display_surf = pygame.display.set_mode((600,400))
+        else:
+            self._display_surf = pygame.display.set_mode((0,0))
         self.size = self.width, self.height = self._display_surf.get_size()
         self._running = True
         self.stacksurf = pygame.Surface((self.width*0.2, self.height), pygame.SRCALPHA)

@@ -454,5 +454,128 @@
             0
         ],
         "offset": 1
+    },
+    "augurs_purification": {
+        "name": "Augur's Purification",
+        "directions": [
+            0,
+            4,
+            4
+        ],
+        "offset": 5,
+        "description": "Convert an argument to a boolean: 0, None and False become False, everything else becomes True"
+    },
+    "negation_purification": {
+        "name": "Negation Purification",
+        "directions": [
+            0,
+            2,
+            2
+        ],
+        "offset": 4,
+        "description": "Inverts the boolean argument"
+    },
+    "disjunction_distillation": {
+        "name": "Disjunction Distillation",
+        "directions": [
+            0,
+            0,
+            4,
+            4
+        ],
+        "offset": 1,
+        "description": "Performs boolean OR"
+    },
+    "conjunction_distillation": {
+        "name": "Conjunction Distillation",
+        "directions": [
+            0,
+            0,
+            2,
+            2
+        ],
+        "offset": 5,
+        "description": "Performs boolean AND"
+    },
+    "exclusion_distillation": {
+        "name": "Exclusion Distillation",
+        "directions": [
+            0,
+            2,
+            2,
+            0
+        ],
+        "offset": 4,
+        "description": "Performs boolean XOR"
+    },
+    "augurs_exaltation": {
+        "name": "Augur's Exaltation",
+        "directions": [
+            0,
+            4,
+            4,
+            0,
+            2
+        ],
+        "offset": 1,
+        "description": "If the first argument is True, keep the second and discard the third. Otherwise vice versa"
+    },
+    "equality_distillation": {
+        "name": "Equality Distillation",
+        "directions": [
+            0,
+            4,
+            0
+        ],
+        "offset": 0,
+        "description": "If the first two arguments are equal, return True, otherwise False"
+    },
+    "inequality_distillation": {
+        "name": "Inequality Distillation",
+        "directions": [
+            0,
+            2,
+            0
+        ],
+        "offset": 0,
+        "description": "If the first two arguments are not equal, return True, otherwise False"
+    },
+    "maximus_distillation": {
+        "name": "Maximus Distillation",
+        "directions": [
+            0,
+            1
+        ],
+        "offset": 1,
+        "description": "If the first argument is greater than the second, return True, otherwise False"
+    },
+    "minimus_distillation": {
+        "name": "Minimus Distillation",
+        "directions": [
+            0,
+            5
+        ],
+        "offset": 2,
+        "description": "If the first argument is lesser than the second, return True, otherwise False"
+    },
+    "maximus_distillation_ii": {
+        "name": "Maximus Distillation II",
+        "directions": [
+            0,
+            1,
+            2
+        ],
+        "offset": 1,
+        "description": "If the first argument is greater or equal to the second, return True, otherwise False"
+    },
+    "minimus_distillation_ii": {
+        "name": "Minimus Distillation II",
+        "directions": [
+            0,
+            5,
+            4
+        ],
+        "offset": 2,
+        "description": "If the first argument is lenn or equal to the second, return True, otherwise False"
     }
 }
