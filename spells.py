@@ -232,102 +232,193 @@ def vector_exaltation(currentstack):
 #Vector Disintegration
 #Split a vector into its X, Y, and Z components (bottom to top).
 def vector_disintegration(currentstack):
-	pass
+	x, y, z = currentstack.pop()
+	currentstack.append(x)
+	currentstack.append(y)
+	currentstack.append(z)
 
 
 #Modulus Distillation
 #Takes the modulus of two numbers.
 def modulus_distillation(currentstack):
-	pass
+	a = currentstack.pop()
+	atype = type(a)
+	b = currentstack.pop()
+	btype = type(b)
+	if atype in [int, float] and btype in [int,float]:
+	    currentstack.append(b%a)
+	elif atype in [int,float] and btype == tuple:
+	    currentstack.append(tuple([value%a for value in b]))
+	elif atype == tuple and btype == tuple:
+	    currentstack.append(tuple([b[i]%a[i] for i in range(3)]))
+	else:
+	    print(f"spell not able to handle types {atype} and {btype}!")
 
 
 #Axial Purification
 #Coerce vector to nearest axial direction or return sign of number
 def axial_purification(currentstack):
-	pass
+    num = currentstack.pop()
+    numtype = type(num)
+    if numtype in [int,float]:
+        if num == 0:
+            currentstack.append(0)
+        else:
+	        currentstack.append(num/abs(num))
+    elif numtype == tuple:
+        length = math.sqrt(sum([x**2 for x in num]))
+        currentstack.append(tuple([element/length for element in num]))
+    else:
+        print(f"spell not able to handle type {numtype}!")
 
 
 #Entropy Reflection
 #Creates a random number between 0 and 1
 def entropy_reflection(currentstack):
-	pass
+	currentstack.append(np.random.rand())
 
 
 #Jester's Gambit
 #Swaps the top two iotas on the stack
 def jesters_gambit(currentstack):
-	pass
-
-
-#Rotation Gambit
-#Yanks the iota third from the top of the stack to the top
-def rotation_gambit(currentstack):
-	pass
-
+    a = currentstack.pop()
+    b = currentstack.pop()
+    currentstack.append(a)
+    currentstack.append(b)
 
 #Rotation Gambit
 #Yanks the iota third from the top of the stack to the top
 def rotation_gambit(currentstack):
-	pass
-
+	a = currentstack.pop()
+	b = currentstack.pop()
+	c = currentstack.pop()
+	currentstack.append(b)
+	currentstack.append(a)
+	currentstack.append(c)
 
 #Rotation Gambit II
 #Yanks the top iota to the third position
 def rotation_gambit_ii(currentstack):
-	pass
+	a = currentstack.pop()
+	b = currentstack.pop()
+	c = currentstack.pop()
+	currentstack.append(a)
+	currentstack.append(c)
+	currentstack.append(b)
 
 
 #Gemini Decomposition
 #Duplicates the top iota
 def gemini_decomposition(currentstack):
-	pass
+    currentstack.append(currentstack[-1])	
 
 
 #Prospector's Gambit
 #Copy the second-to-last iota to the top
 def prospectors_gambit(currentstack):
-	pass
+	currentstack.append(currentstack[-2])
 
 
 #Undertaker's Gambit
 #Copy the top iota of the stack, put it under the second
 def undertakers_gambit(currentstack):
-	pass
+	a = currentstack.pop()
+	b = currentstack.pop()
+	currentstack.append(a)
+	currentstack.append(b)
+	currentstack.append(a)
 
 
 #Gemini Gambit
 #Removes the number at the top of the stack, copies the next iota that number of times
 def gemini_gambit(currentstack):
-	pass
+    num = currentstack.pop()
+    item = currentstack.pop()
+    if type(num) != int:
+        print("this spell needs a number at the top of the stack")
+    else:
+        for i in range(num):
+            currentstack.append(item)
 
 
 #Dioscuri Gambit
 #Copy the top two iotas of the stack
 def dioscuri_gambit(currentstack):
-	pass
+	currentstack.append(currentstack[-2])
+	currentstack.append(currentstack[-2])
 
 
 #Flock's Reflection
 #Pushes the size of the stack 
 def flocks_reflection(currentstack):
-	pass
+	currentstack.append(len(currentstack))
 
 
 #Fisherman's Gambit
 #Grabs the element in the stack indexed by the number and brings it to the top. If the number is negative, instead moves the top iota down that many elements
 def fishermans_gambit(currentstack):
-	pass
+    num = currentstack.pop()
+    if type(num) != int:
+        print("this spell needs a number at the top of the stack")
+    else:
+        if num >= 0:
+            item = currentstack[-num]
+            del currentstack[-num]
+            currentstack.append(item)
+        else:
+            item = currentstack.pop()
+            currentstack.insert(len(currentstack)+num, item)
 
 
 #Fisherman's Gambit II
 #Like Fisherman's Gambit, but copies instead of moving
 def fishermans_gambit_ii(currentstack):
-	pass
+    num = currentstack.pop()
+    if type(num) != int:
+        print("this spell needs a number at the top of the stack")
+    else:
+        if num >= 0:
+            item = currentstack[-num-1]
+            currentstack.append(item)
+        else:
+            item = currentstack[-1]
+            currentstack.insert(len(currentstack)+num-1, item)
 
 
 #Swindler's Gambit
 #Rearranges the top elements based on the provided Lehmer Code
+#My god this one will be silly
 def swindlers_gambit(currentstack):
-	pass
+    code = currentstack.pop()
+    if type(code) != int:
+        print("lehmer code needs to be an integer")
+        return
+    #factorials up to 720
+    factorials = [1, 2, 6, 24, 120, 720]
+    i = 0
+    while factorials[i] <= code:
+        i += 1
+    if i > len(currentstack):
+        print("not enough iotas on stack for lehmer code")
+        return
+    choices = [currentstack.pop() for x in range(i+1)]
+    print(f"i: {i}")
+    print(choices)
+    out = [] 
+    while i > 0:
+        distance = factorials[i]-code
+        size = factorials[i] - factorials[i-1]
+        choice = math.ceil((i)*distance/size)-1
+        out.append(choices[choice])
+        del choices[choice]
+        code %= factorials[i-1]
+        while factorials[i-1] > code and i > 0:
+            i -= 1
+    for element in choices[::-1]:
+        out.append(element)
+    for element in out:
+        currentstack.append(element)
+
+	
 
 

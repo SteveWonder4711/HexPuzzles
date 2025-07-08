@@ -80,7 +80,7 @@ def check_bookkeeper_gambit(directions, currentstack):
     for i in range(len(bookkeeper)):
         if bookkeeper[i] == 1:
             newstack.append(affected[i])
-    
+    Game.currentstack = newstack 
     return True
 
 
@@ -117,7 +117,7 @@ def newspell(currentspells, spelldirections, offset):
         "description": description
     }
     with open(f'spells.py', 'a') as f:
-        f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack):\n\tpass\n\n\n')
+        f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack):\n    pass\n\n\n')
 
 
 def executespell(spellid, currentstack):
