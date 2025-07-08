@@ -106,6 +106,7 @@ def additive_distillation(currentstack):
         currentstack.append(b)
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
+        currentstack.append("ERROR")
 	
 
 #Subtractive Distillation
@@ -123,6 +124,7 @@ def subtractive_distillation(currentstack):
         currentstack.append(tuple([b[i]-a[i] for i in range(3)]))
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
+        currentstack.append("ERROR")
 
 
 #Multiplicative Distillation
@@ -143,6 +145,7 @@ def multiplicative_distillation(currentstack):
         currentstack.append(sum([a[i]*b[i] for i in range(3)]))
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
+        currentstack.append("ERROR")
 
 #Division Distillation
 #Perform division or the cross product.
@@ -163,6 +166,7 @@ def division_distillation(currentstack):
         currentstack.append((s1, s2, s3))
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
+        currentstack.append("ERROR")
 
 
 
@@ -182,6 +186,7 @@ def length_purification(currentstack):
         currentstack.append(len(num))
     else:
         print(f"spell not able to handle type {numtype}!")
+        currentstack.append("ERROR")
 
 #Power Distillation
 #Perform exponentiation or vector projection.
@@ -201,6 +206,7 @@ def power_distillation(currentstack):
         currentstack.append(tuple((np.dot(u, v)/v_norm**2)*v))
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
+        currentstack.append("ERROR")
 
 
 
@@ -215,6 +221,7 @@ def floor_purification(currentstack):
         currentstack.append(tuple([math.floor(element) for element in num]))
     else:
         print(f"spell not able to handle type {numtype}!")
+        currentstack.append("ERROR")
 
 #Ceiling Purification
 #"Ceilings" a number, raising it to the next integer value if it has a fractional componen. If passed a vector, instead ceils each of its components.
@@ -227,6 +234,7 @@ def ceiling_purification(currentstack):
         currentstack.append(tuple([math.ceil(element) for element in num]))
     else:
         print(f"spell not able to handle type {numtype}!")
+        currentstack.append("ERROR")
 
 
 #Vector Exaltation
@@ -279,6 +287,7 @@ def axial_purification(currentstack):
         currentstack.append(tuple([element/length for element in num]))
     else:
         print(f"spell not able to handle type {numtype}!")
+        currentstack.append("ERROR")
 
 
 #Entropy Reflection
@@ -370,6 +379,7 @@ def fishermans_gambit(currentstack):
     num = currentstack.pop()
     if type(num) != int:
         print("this spell needs a number at the top of the stack")
+        currentstack.append("ERROR")
         return
     if num >= 0:
         item = copy.deepcopy(currentstack[-num])
@@ -386,6 +396,7 @@ def fishermans_gambit_ii(currentstack):
     num = currentstack.pop()
     if type(num) != int:
         print("this spell needs a number at the top of the stack")
+        currentstack.append("ERROR")
         return
     if num >= 0:
         item = currentstack[-num-1]
@@ -402,6 +413,7 @@ def swindlers_gambit(currentstack):
     code = currentstack.pop()
     if type(code) != int:
         print("lehmer code needs to be an integer")
+        currentstack.append("ERROR")
         return
     #factorials up to 720
     factorials = [1, 2, 6, 24, 120, 720]
@@ -410,6 +422,7 @@ def swindlers_gambit(currentstack):
         i += 1
     if i > len(currentstack):
         print("not enough iotas on stack for lehmer code")
+        currentstack.append("ERROR")
         return
     choices = [currentstack.pop() for _ in range(i+1)]
     print(f"i: {i}")
@@ -448,6 +461,7 @@ def negation_purification(currentstack):
     argument = currentstack.pop()
     if type(argument) != bool:
         print("argument needs to be bool!")
+        currentstack.append("ERROR")
         return
     currentstack.append(False if argument else True)
 
@@ -459,6 +473,7 @@ def disjunction_distillation(currentstack):
     b = currentstack.pop()
     if type(a) != bool or type(b) != bool:
         print("both arguments need to be booleans")
+        currentstack.append("ERROR")
         return
     currentstack.append(True if a or b else False)
 
@@ -471,6 +486,7 @@ def conjunction_distillation(currentstack):
     b = currentstack.pop()
     if type(a) != bool or type(b) != bool:
         print("both arguments need to be booleans")
+        currentstack.append("ERROR")
         return
     currentstack.append(True if a and b else False)
 
@@ -482,6 +498,7 @@ def exclusion_distillation(currentstack):
     b = currentstack.pop()
     if type(a) != bool or type(b) != bool:
         print("both arguments need to be booleans")
+        currentstack.append("ERROR")
         return
     currentstack.append(True if (a ^ b) else False)
 
@@ -492,6 +509,7 @@ def augurs_exaltation(currentstack):
     sel = currentstack.pop()
     if type(sel) != bool:
         print("needs a boolean value as selector")
+        currentstack.append("ERROR")
         return
     if sel:
         del currentstack[-2]
@@ -523,6 +541,7 @@ def maximus_distillation(currentstack):
     b = currentstack.pop()
     if type(a) not in [int,float] or type(b) not in [int,float]:
         print("needs two numbers")
+        currentstack.append("ERROR")
         return
     else:
         currentstack.append(b>a)
@@ -535,6 +554,7 @@ def minimus_distillation(currentstack):
     b = currentstack.pop()
     if type(a) not in [int,float] or type(b) not in [int,float]:
         print("needs two numbers")
+        currentstack.append("ERROR")
         return
     else:
         currentstack.append(b<a)
@@ -547,6 +567,7 @@ def maximus_distillation_ii(currentstack):
     b = currentstack.pop()
     if type(a) not in [int,float] or type(b) not in [int,float]:
         print("needs two numbers")
+        currentstack.append("ERROR")
         return
     else:
         currentstack.append(b>=a)
@@ -559,6 +580,7 @@ def minimus_distillation_ii(currentstack):
     b = currentstack.pop()
     if type(a) not in [int,float] or type(b) not in [int,float]:
         print("needs two numbers")
+        currentstack.append("ERROR")
         return
     else:
         currentstack.append(b<=a)
@@ -570,10 +592,12 @@ def selection_distillation(currentstack):
     num = currentstack.pop()
     if type(num) != int:
         print("needs an integer")
+        currentstack.append("ERROR")
         return
     container = currentstack.pop()
     if type(container) != list:
         print("expected a list")
+        currentstack.append("ERROR")
         return
     currentstack.append(container[num])
 
@@ -586,6 +610,7 @@ def selection_exaltation(currentstack):
     container = currentstack.pop()
     if type(num1) != int or type(num2) != int:
         print("needs two integers and a list")
+        currentstack.append("ERROR")
         return
     if num1 > num2:
         num1, num2 = num2, num1
@@ -599,6 +624,7 @@ def integration_distillation(currentstack):
     container = currentstack.pop()
     if type(container) != list:
         print("needs a list")
+        currentstack.append("ERROR")
         return
     container.append(element)
 
@@ -609,6 +635,7 @@ def derivation_decomposition(currentstack):
     container = currentstack.pop()
     if type(container) != list:
         print("needs a list")
+        currentstack.append("ERROR")
         return
     currentstack.append(container.pop())
 
@@ -632,6 +659,7 @@ def retrograde_purification(currentstack):
     container = currentstack.pop()
     if type(container) != list:
         print("need a list")
+        currentstack.append("ERROR")
         return
     currentstack.append(container.reverse())
 
@@ -643,6 +671,7 @@ def locators_distillation(currentstack):
     container = currentstack.pop()
     if type(container) != list:
         print("needs a list")
+        currentstack.append("ERROR")
         return
     if element not in container:
         currentstack.append(-1)
@@ -657,6 +686,7 @@ def excisors_distillation(currentstack):
     container = currentstack.pop()
     if type(num) != int or type(container) != list:
         print("needs an integer and a list")
+        currentstack.append("ERROR")
         return
     del container[num]
 
@@ -668,6 +698,7 @@ def surgeons_exaltation(currentstack):
     index = currentstack.pop()
     if type(index) != int or type(currentstack[-1]) != list: 
         print("needs an integer, an element and a list")
+        currentstack.append("ERROR")
         return
     currentstack[-1][index] = element
 
@@ -678,6 +709,7 @@ def flocks_gambit(currentstack):
     num = currentstack.pop()
     if type(num) != int:
         print("needs an integer")
+        currentstack.append("ERROR")
         return
     outlist = []
     for _ in range(num):
@@ -692,6 +724,7 @@ def flocks_disintegration(currentstack):
     container = currentstack.pop()
     if type(container) != list:
         print("needs a list")
+        currentstack.append("ERROR")
         return
     for element in container:
         currentstack.append(element)
@@ -703,6 +736,7 @@ def speakers_distillation(currentstack):
     element = currentstack.pop()
     if type(currentstack[-1]) != list:
         print("needs a list")
+        currentstack.append("ERROR")
         return
     currentstack[-1].insert(0, element)
 
@@ -712,6 +746,7 @@ def speakers_distillation(currentstack):
 def speakers_decomposition(currentstack):
     if type(currentstack[-1]) != list:
         print("needs a list")
+        currentstack.append("ERROR")
         return
     element = currentstack[-1]
     del currentstack[-1]
