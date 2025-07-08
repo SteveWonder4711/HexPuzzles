@@ -1,5 +1,5 @@
 import math
-
+import numpy as np
 
 #True Reflection
 #Adds True to the top of the stack
@@ -96,7 +96,7 @@ def additive_distillation(currentstack):
 	elif atype in [int,float] and btype == tuple:
 	    currentstack.append(tuple([value+a for value in b]))
 	elif atype == tuple and btype in [int,float]:
-	    currentstack.append(tuple([value+b for value in b]))
+	    currentstack.append(tuple([value+b for value in a]))
 	elif atype == tuple and btype == tuple:
 	    currentstack.append(tuple([a[i]+b[i] for i in range(3)]))
 	else:
@@ -123,25 +123,73 @@ def subtractive_distillation(currentstack):
 #Multiplicative Distillation
 #Perform multiplication or the dot product.
 def multiplicative_distillation(currentstack):
-	pass
-
+    a = currentstack.pop()
+    atype = type(a)
+    b = currentstack.pop()
+    btype = type(b)
+    if atype in [int, float] and btype in [int,float]:
+        currentstack.append(a*b)
+    elif atype in [int,float] and btype == tuple:
+        currentstack.append(tuple([value*a for value in b]))
+    elif atype == tuple and btype in [int,float]:
+        currentstack.append(tuple([value*b for value in a]))
+    elif atype == tuple and btype == tuple:
+        #dot product
+        currentstack.append(sum([a[i]*b[i] for i in range(3)]))
+    else:
+        print(f"spell not able to handle types {atype} and {btype}!")
 
 #Division Distillation
 #Perform division or the cross product.
 def division_distillation(currentstack):
-	pass
+    a = currentstack.pop()
+    atype = type(a)
+    b = currentstack.pop()
+    btype = type(b)
+    if atype in [int, float] and btype in [int,float]:
+        currentstack.append(b/a)
+    elif atype in [int,float] and btype == tuple:
+        currentstack.append(tuple([value/a for value in b]))
+    elif atype == tuple and btype == tuple:
+        #cross product
+        s1 = b[1]*a[2] - b[2]*a[1]
+        s2 = b[2]*a[0] - b[0]*a[2]
+        s3 = b[0]*a[1] - b[1]*a[0]
+        currentstack.append((s1, s2, s3))
+    else:
+        print(f"spell not able to handle types {atype} and {btype}!")
+
+
 
 
 #Length Purification
 #Compute the absolute value or length.
 def length_purification(currentstack):
-	pass
+    num = currentstack.pop()
+    numtype = type(num)
+    if numtype in [int,float]:
+        currentstack.append(abs(num))
+    elif numtype == tuple:
+        currentstack.append(math.sqrt(sum([x**2 for x in num])))
 
 
 #Power Distillation
 #Perform exponentiation or vector projection.
 def power_distillation(currentstack):
-	pass
+    a = currentstack.pop()
+    atype = type(a)
+    b = currentstack.pop()
+    btype = type(b)
+    if atype in [int, float] and btype in [int,float]:
+        currentstack.append(b**a)
+    elif atype in [int, float] and btype == tuple:
+        currentstack.append(tuple([value**a for value in b]))
+    elif atype == tuple and btype == tuple:
+        u = np.array(b)
+        v = np.array(a)
+        v_norm = np.sqrt(sum(v**2))
+        currentstack.append(tuple((np.dot(u, v)/v_norm**2)*v))
+
 
 
 #Floor Purification
@@ -159,7 +207,10 @@ def ceiling_purification(currentstack):
 #Vector Exaltation
 #Combine three numbers at the top of the stack into a vector's X, Y, and Z components (bottom to top).
 def vector_exaltation(currentstack):
-	pass
+    z = currentstack.pop()
+    y = currentstack.pop()
+    x = currentstack.pop()
+    currentstack.append((x, y, z))
 
 
 #Vector Disintegration

@@ -219,6 +219,59 @@
             0
         ]
     },
+    "ceiling_purification": {
+        "name": "Ceiling Purification",
+        "directions": [
+            0,
+            5,
+            5,
+            0
+        ],
+        "offset": 0
+    },
+    "vector_exaltation": {
+        "name": "Vector Exaltation",
+        "directions": [
+            0,
+            1,
+            0,
+            5,
+            4,
+            3,
+            2
+        ],
+        "offset": 0,
+        "description": "Combine three numbers into a vector"
+    },
+    "vector_disintegration": {
+        "name": "Vector Disintegration",
+        "directions": [
+            0,
+            5,
+            0,
+            1,
+            2,
+            3,
+            4
+        ],
+        "offset": 0,
+        "description": "Split a vector into its X, Y, and Z components (bottom to top)."
+    },
+    "modulus_distillation": {
+        "name": "Modulus Distillation",
+        "directions": [
+            0,
+            4,
+            0,
+            2,
+            2,
+            0,
+            4,
+            0
+        ],
+        "offset": 5,
+        "description": "Takes the modulus of two numbers"
+    },
     "axial_purification": {
         "name": "Axial Purification",
         "directions": [

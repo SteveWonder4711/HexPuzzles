@@ -85,13 +85,22 @@ def check_bookkeeper_gambit(directions, currentstack):
     return True
 
 
-def drawstack(currentstack, surface, width):
-    pygame.draw.rect(surface, (0, 0, 0, 50), pygame.Rect(0, 0, width, Game.height))
-    for i in range(len(currentstack)):
-        text = Game.font.render(str(currentstack[i]), False, LINEDRAWCOLOR)
+def drawstack(currentstack, gamesurface, stacksurface):
+    dimensions = width, height = stacksurface.get_size()
+    stacksurface.fill((0, 0, 0, 0))
+    stacksurface.fill((0, 0, 0, 100))
+    i = len(currentstack)-1
+    while i >= 0 and i > len(currentstack)-20:
+        if type(currentstack[i]) in [int,float]:
+            string = str(currentstack[i])
+        elif type(currentstack[i]) == tuple: 
+            string = "({}, {}, {})".format(*["{:.3f}".format(element) if type(element) == float else element for element in list(currentstack[i])])
+        text = Game.font.render(string, False, LINEDRAWCOLOR)
         textRect = text.get_rect()
-        textRect.center = (min(textRect.width//2, width/2), textRect.height*(i+0.5))
-        surface.blit(text, textRect)
+        textRect.center = (min(textRect.width//2, width/2), textRect.height*(len(currentstack)-i-0.5))
+        stacksurface.blit(text, textRect)
+        i -= 1
+    gamesurface.blit(stacksurface, (0, 0))
 
 
 
@@ -105,7 +114,8 @@ def newspell(currentspells, spelldirections, offset):
     currentspells[id] = {
         "name": spellname,
         "directions": spelldirections,
-        "offset": offset
+        "offset": offset,
+        "description": description
     }
     with open(f'spells.py', 'a') as f:
         f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack):\n\tpass\n\n\n')
@@ -248,6 +258,7 @@ class App:
         self._display_surf = pygame.display.set_mode((0,0))
         self.size = self.width, self.height = self._display_surf.get_size()
         self._running = True
+        self.stacksurf = pygame.Surface((self.width*0.2, self.height), pygame.SRCALPHA)
         self.font = pygame.font.Font('font.ttf', 32)
         self.state = "Idle"
         self.pointdistance = self.height//11
@@ -340,8 +351,8 @@ class App:
         for connection in self.connections:
             connection.draw(self._display_surf)
         if len(self.currentstack) > 0:
-               drawstack(self.currentstack, self._display_surf, self.width*0.2)
-        pygame.display.update()
+               drawstack(self.currentstack, self._display_surf, self.stacksurf)
+        pygame.display.flip()
     def on_cleanup(self):
         pygame.quit()
  
