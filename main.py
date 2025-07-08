@@ -85,6 +85,14 @@ def check_bookkeeper_gambit(directions, currentstack):
     return True
 
 
+def drawstack(currentstack, surface, width):
+    pygame.draw.rect(surface, (0, 0, 0, 50), pygame.Rect(0, 0, width, Game.height))
+    for i in range(len(currentstack)):
+        text = Game.font.render(str(currentstack[i]), False, LINEDRAWCOLOR)
+        textRect = text.get_rect()
+        textRect.center = (min(textRect.width//2, width/2), textRect.height*(i+0.5))
+        surface.blit(text, textRect)
+
 
 
 def newspell(currentspells, spelldirections, offset):
@@ -92,6 +100,7 @@ def newspell(currentspells, spelldirections, offset):
     id = input("What should the Spell ID be?")
     if id == "":
         id = spellname.lower().replace(" ", "_")
+        id = id.replace("'", "")
     description = input("What does it do?")
     currentspells[id] = {
         "name": spellname,
@@ -239,6 +248,7 @@ class App:
         self._display_surf = pygame.display.set_mode((0,0))
         self.size = self.width, self.height = self._display_surf.get_size()
         self._running = True
+        self.font = pygame.font.Font('font.ttf', 32)
         self.state = "Idle"
         self.pointdistance = self.height//11
         self.points = generatepoints()
@@ -329,7 +339,8 @@ class App:
             point.draw(self._display_surf)
         for connection in self.connections:
             connection.draw(self._display_surf)
-        
+        if len(self.currentstack) > 0:
+               drawstack(self.currentstack, self._display_surf, self.width*0.2)
         pygame.display.update()
     def on_cleanup(self):
         pygame.quit()

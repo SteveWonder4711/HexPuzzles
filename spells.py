@@ -174,3 +174,93 @@ def modulus_distillation(currentstack):
 	pass
 
 
+#Axial Purification
+#Coerce vector to nearest axial direction or return sign of number
+def axial_purification(currentstack):
+	pass
+
+
+#Entropy Reflection
+#Creates a random number between 0 and 1
+def entropy_reflection(currentstack):
+	pass
+
+
+#Jester's Gambit
+#Swaps the top two iotas on the stack
+def jesters_gambit(currentstack):
+	pass
+
+
+#Rotation Gambit
+#Yanks the iota third from the top of the stack to the top
+def rotation_gambit(currentstack):
+	pass
+
+
+#Rotation Gambit
+#Yanks the iota third from the top of the stack to the top
+def rotation_gambit(currentstack):
+	pass
+
+
+#Rotation Gambit II
+#Yanks the top iota to the third position
+def rotation_gambit_ii(currentstack):
+	pass
+
+
+#Gemini Decomposition
+#Duplicates the top iota
+def gemini_decomposition(currentstack):
+	pass
+
+
+#Prospector's Gambit
+#Copy the second-to-last iota to the top
+def prospectors_gambit(currentstack):
+	pass
+
+
+#Undertaker's Gambit
+#Copy the top iota of the stack, put it under the second
+def undertakers_gambit(currentstack):
+	pass
+
+
+#Gemini Gambit
+#Removes the number at the top of the stack, copies the next iota that number of times
+def gemini_gambit(currentstack):
+	pass
+
+
+#Dioscuri Gambit
+#Copy the top two iotas of the stack
+def dioscuri_gambit(currentstack):
+	pass
+
+
+#Flock's Reflection
+#Pushes the size of the stack 
+def flocks_reflection(currentstack):
+	pass
+
+
+#Fisherman's Gambit
+#Grabs the element in the stack indexed by the number and brings it to the top. If the number is negative, instead moves the top iota down that many elements
+def fishermans_gambit(currentstack):
+	pass
+
+
+#Fisherman's Gambit II
+#Like Fisherman's Gambit, but copies instead of moving
+def fishermans_gambit_ii(currentstack):
+	pass
+
+
+#Swindler's Gambit
+#Rearranges the top elements based on the provided Lehmer Code
+def swindlers_gambit(currentstack):
+	pass
+
+
