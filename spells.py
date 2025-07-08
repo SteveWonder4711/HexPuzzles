@@ -2,6 +2,9 @@ import math
 import numpy as np
 import copy
 
+#TODO: Add more safety and mishap detection
+
+
 #True Reflection
 #Adds True to the top of the stack
 def true_reflection(currentstack):
