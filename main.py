@@ -3,6 +3,7 @@ from pygame.locals import *
 import math
 import json
 import spells
+import random
 
 
 CIRCLECOLOR = (100, 100, 255)
@@ -89,12 +90,15 @@ def iotatostring(iota):
         return "({}, {}, {})".format(*[math.floor(element*1000)/1000 for element in list(iota)])
     elif type(iota) == list:
         string = "["
-        
         for i in range(len(iota)):
             string += iotatostring(iota[i])
             string += ", " if i != len(iota)-1 else "]"
         return string
-        
+    elif type(iota) == str:
+        #strings are used for patterns and other internal types
+        if iota == "ERROR":
+            return "".join(random.choices("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!§$%&/()=?\\ß*+-#'_.:,;", k=20))
+        return ""
     else:
         return ""
 
@@ -105,7 +109,10 @@ def drawstack(currentstack, gamesurface, stacksurface):
     i = len(currentstack)-1
     while i >= 0 and i > len(currentstack)-20:
         string = iotatostring(currentstack[i])
-        text = Game.font.render(string, False, LINEDRAWCOLOR)
+        color = LINEDRAWCOLOR
+        if currentstack[i] == "ERROR":
+            color = LINEERRORCOLOR
+        text = Game.font.render(string, False, color)
         textRect = text.get_rect()
         textRect.center = (textRect.width//2, round(textRect.height*(len(currentstack)-i-0.5)))
         stacksurface.blit(text, textRect)

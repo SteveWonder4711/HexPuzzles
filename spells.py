@@ -345,6 +345,7 @@ def gemini_gambit(currentstack):
     item = currentstack.pop()
     if type(num) != int:
         print("this spell needs a number at the top of the stack")
+        currentstack.append("ERROR")
         return
     for _ in range(num):
         currentstack.append(copy.deepcopy(item))
