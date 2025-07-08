@@ -89,7 +89,7 @@ def drawstack(currentstack, gamesurface, stacksurface):
     stacksurface.fill((0, 0, 0, 100))
     i = len(currentstack)-1
     while i >= 0 and i > len(currentstack)-20:
-        if type(currentstack[i]) in [int,float]:
+        if type(currentstack[i]) in [int,float,bool]:
             string = str(currentstack[i])
         elif type(currentstack[i]) == tuple: 
             string = "({}, {}, {})".format(*[math.floor(element*1000)/1000 for element in list(currentstack[i])])

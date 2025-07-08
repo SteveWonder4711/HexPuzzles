@@ -87,37 +87,40 @@ def euler_reflection(currentstack):
 #Additive Distillation
 #Performs Addition
 def additive_distillation(currentstack):
-	a = currentstack.pop()
-	atype = type(a)
-	b = currentstack.pop()
-	btype = type(b)
-	if atype in [int, float] and btype in [int,float]:
-	    currentstack.append(a+b)
-	elif atype in [int,float] and btype == tuple:
-	    currentstack.append(tuple([value+a for value in b]))
-	elif atype == tuple and btype in [int,float]:
-	    currentstack.append(tuple([value+b for value in a]))
-	elif atype == tuple and btype == tuple:
-	    currentstack.append(tuple([a[i]+b[i] for i in range(3)]))
-	else:
-	    print(f"spell not able to handle types {atype} and {btype}!")
+    a = currentstack.pop()
+    atype = type(a)
+    b = currentstack.pop()
+    btype = type(b)
+    if atype in [int, float] and btype in [int,float]:
+        currentstack.append(a+b)
+    elif atype in [int,float] and btype == tuple:
+        currentstack.append(tuple([value+a for value in b]))
+    elif atype == tuple and btype in [int,float]:
+        currentstack.append(tuple([value+b for value in a]))
+    elif atype == tuple and btype == tuple:
+        currentstack.append(tuple([a[i]+b[i] for i in range(3)]))
+    elif atype == list and btype == list:
+        for element in a:
+            b.append(element)
+    else:
+        print(f"spell not able to handle types {atype} and {btype}!")
 	
 
 #Subtractive Distillation
 #Performs Subtraction
 def subtractive_distillation(currentstack):
-	a = currentstack.pop()
-	atype = type(a)
-	b = currentstack.pop()
-	btype = type(b)
-	if atype in [int, float] and btype in [int,float]:
-	    currentstack.append(b-a)
-	elif atype in [int,float] and btype == tuple:
-	    currentstack.append(tuple([value-a for value in b]))
-	elif atype == tuple and btype == tuple:
-	    currentstack.append(tuple([b[i]-a[i] for i in range(3)]))
-	else:
-	    print(f"spell not able to handle types {atype} and {btype}!")
+    a = currentstack.pop()
+    atype = type(a)
+    b = currentstack.pop()
+    btype = type(b)
+    if atype in [int, float] and btype in [int,float]:
+        currentstack.append(b-a)
+    elif atype in [int,float] and btype == tuple:
+        currentstack.append(tuple([value-a for value in b]))
+    elif atype == tuple and btype == tuple:
+        currentstack.append(tuple([b[i]-a[i] for i in range(3)]))
+    else:
+        print(f"spell not able to handle types {atype} and {btype}!")
 
 
 #Multiplicative Distillation
@@ -173,6 +176,8 @@ def length_purification(currentstack):
         currentstack.append(math.sqrt(sum([x**2 for x in num])))
     elif numtype == bool:
         currentstack.append(1 if num else 0)
+    elif numtype == list:
+        currentstack.append(len(num))
     else:
         print(f"spell not able to handle type {numtype}!")
 
@@ -243,18 +248,18 @@ def vector_disintegration(currentstack):
 #Modulus Distillation
 #Takes the modulus of two numbers.
 def modulus_distillation(currentstack):
-	a = currentstack.pop()
-	atype = type(a)
-	b = currentstack.pop()
-	btype = type(b)
-	if atype in [int, float] and btype in [int,float]:
-	    currentstack.append(b%a)
-	elif atype in [int,float] and btype == tuple:
-	    currentstack.append(tuple([value%a for value in b]))
-	elif atype == tuple and btype == tuple:
-	    currentstack.append(tuple([b[i]%a[i] for i in range(3)]))
-	else:
-	    print(f"spell not able to handle types {atype} and {btype}!")
+    a = currentstack.pop()
+    atype = type(a)
+    b = currentstack.pop()
+    btype = type(b)
+    if atype in [int, float] and btype in [int,float]:
+        currentstack.append(b%a)
+    elif atype in [int,float] and btype == tuple:
+        currentstack.append(tuple([value%a for value in b]))
+    elif atype == tuple and btype == tuple:
+        currentstack.append(tuple([b[i]%a[i] for i in range(3)]))
+    else:
+        print(f"spell not able to handle types {atype} and {btype}!")
 
 
 #Axial Purification
@@ -266,7 +271,7 @@ def axial_purification(currentstack):
         if num == 0:
             currentstack.append(0)
         else:
-	        currentstack.append(num/abs(num))
+            currentstack.append(num/abs(num))
     elif numtype == tuple:
         length = math.sqrt(sum([x**2 for x in num]))
         currentstack.append(tuple([element/length for element in num]))
@@ -339,7 +344,7 @@ def gemini_gambit(currentstack):
     if type(num) != int:
         print("this spell needs a number at the top of the stack")
         return
-    for i in range(num):
+    for _ in range(num):
         currentstack.append(item)
 
 
@@ -403,7 +408,7 @@ def swindlers_gambit(currentstack):
     if i > len(currentstack):
         print("not enough iotas on stack for lehmer code")
         return
-    choices = [currentstack.pop() for x in range(i+1)]
+    choices = [currentstack.pop() for _ in range(i+1)]
     print(f"i: {i}")
     print(choices)
     out = [] 
@@ -554,5 +559,158 @@ def minimus_distillation_ii(currentstack):
         return
     else:
         currentstack.append(b<=a)
+
+
+#Selection Distillation
+#Remove the number at the top of the stack an get the element indexed by that number from the list on the top of the stack. Return None if out of bounds
+def selection_distillation(currentstack):
+    num = currentstack.pop()
+    if type(num) != int:
+        print("needs an integer")
+        return
+    container = currentstack.pop()
+    if type(container) != list:
+        print("expected a list")
+        return
+    currentstack.append(container[num])
+
+
+#Selection Exaltation
+#Remove the two numbers at the top of the stack, replace the list on top with a sublist between those indices, both inclusive
+def selection_exaltation(currentstack):
+    num1 = currentstack.pop()
+    num2 = currentstack.pop()
+    container = currentstack.pop()
+    if type(num1) != int or type(num2) != int:
+        print("needs two integers and a list")
+        return
+    if num1 > num2:
+        num1, num2 = num2, num1
+    currentstack.append(container[num1:num2+1])
+
+
+#Integration Distillation
+#Remove the element on top of the stack and add it to the list on top of the stack
+def integration_distillation(currentstack):
+    element = currentstack.pop()
+    container = currentstack.pop()
+    if type(container) != list:
+        print("needs a list")
+        return
+    container.append(element)
+
+
+#Derivation Decomposition
+#Remove the last element of the list on top of the stack and add it onto the stack
+def derivation_decomposition(currentstack):
+    container = currentstack.pop()
+    if type(container) != list:
+        print("needs a list")
+        return
+    currentstack.append(container.pop())
+
+
+#Vacant Reflection
+#Push an empty list to the top of the stack.
+def vacant_reflection(currentstack):
+    currentstack.append([])
+
+
+#Single's Purification
+#Remove the top of the stack and push a list containing only that element.
+def singles_purification(currentstack):
+    element = currentstack.pop()
+    currentstack.append([element])
+
+
+#Retrograde Purification
+#Reverse the list at the top of the stack
+def retrograde_purification(currentstack):
+    container = currentstack.pop()
+    if type(container) != list:
+        print("need a list")
+        return
+    currentstack.append(container.reverse())
+
+
+#Locator's Distillation
+#Remove the top element and list on the stack and push the index of that element in the list, -1 if it does not exist.
+def locators_distillation(currentstack):
+    element = currentstack.pop()
+    container = currentstack.pop()
+    if type(container) != list:
+        print("needs a list")
+        return
+    if element not in container:
+        currentstack.append(-1)
+    else:
+        currentstack.append(container.index(element))
+
+
+#Excisor's Distillation
+#Remove the number at the top of the stack, then remove the element indexed by the number of the list on the top of the stack.
+def excisors_distillation(currentstack):
+    num = currentstack.pop()
+    container = currentstack.pop()
+    if type(num) != int or type(container) != list:
+        print("needs an integer and a list")
+        return
+    del container[num]
+
+
+#Surgeon's Exaltation
+#Remove the top element and a number from the stack, then set the nth element of the list on top of the stack with that element
+def surgeons_exaltation(currentstack):
+    element = currentstack.pop()
+    index = currentstack.pop()
+    if type(index) != int or type(currentstack[-1]) != list: 
+        print("needs an integer, an element and a list")
+        return
+    currentstack[-1][index] = element
+
+
+#Flock's Gambit
+#Remove a number and then that number many elements from the stack, push a list with all those elements.
+def flocks_gambit(currentstack):
+    num = currentstack.pop()
+    if type(num) != int:
+        print("needs an integer")
+        return
+    outlist = []
+    for _ in range(num):
+        outlist.append(currentstack.pop())
+    currentstack.append(outlist)
+
+
+#Flock's Disintegration
+#Remove the list at the top of the stack and push each element of it to the stack
+def flocks_disintegration(currentstack):
+    container = currentstack.pop()
+    if type(container) != list:
+        print("needs a list")
+        return
+    for element in container:
+        currentstack.append(element)
+
+
+#Speaker's Distillation
+#Remove the top element of the stack, add it as the first element to the list on top of the stack.
+def speakers_distillation(currentstack):
+    element = currentstack.pop()
+    if type(currentstack[-1]) != list:
+        print("needs a list")
+        return
+    currentstack[-1].insert(0, element)
+
+
+#Speaker's Decomposition
+#Remove the first element of the list at the top of the stack and push it to the stack.
+def speakers_decomposition(currentstack):
+    if type(currentstack[-1]) != list:
+        print("needs a list")
+        return
+    element = currentstack[-1]
+    del currentstack[-1]
+    currentstack.append(element)
 
 
