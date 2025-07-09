@@ -412,7 +412,6 @@ def fishermans_gambit_ii(currentstack, gameobj):
 
 #Swindler's Gambit
 #Rearranges the top elements based on the provided Lehmer Code
-#My god this one will be silly
 def swindlers_gambit(currentstack, gameobj):
     code = currentstack.pop()
     if type(code) != int:

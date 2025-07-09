@@ -7,7 +7,9 @@
             3,
             1,
             2
-        ]
+        ],
+        "offset": 1,
+        "description": "Adds True to the top of the stack"
     },
     "false_reflection": {
         "name": "False Reflection",
@@ -17,14 +19,18 @@
             3,
             5,
             4
-        ]
+        ],
+        "offset": 5,
+        "description": "Adds False to the top of the stack"
     },
     "nullary_reflection": {
         "name": "Nullary Reflection",
         "directions": [
             0,
             2
-        ]
+        ],
+        "offset": 0,
+        "description": "Adds Null to the top of the stack"
     },
     "vector_reflection_zero": {
         "name": "Vector Reflection Zero",
@@ -35,7 +41,9 @@
             3,
             2,
             1
-        ]
+        ],
+        "offset": 4,
+        "description": "Adds (0, 0, 0) to the top of the stack"
     },
     "vector_reflection_px": {
         "name": "Vector Reflection +X",
@@ -48,7 +56,9 @@
             1,
             2,
             0
-        ]
+        ],
+        "offset": 4,
+        "description": "Adds (1, 0, 0) to the top of the stack"
     },
     "vector_reflection_nx": {
         "name": "Vector Reflection -X",
@@ -61,7 +71,9 @@
             5,
             4,
             2
-        ]
+        ],
+        "offset": 5,
+        "description": "Adds (-1, 0, 0) to the top of the stack"
     },
     "vector_reflection_py": {
         "name": "Vector Reflection +Y",
@@ -74,7 +86,9 @@
             1,
             2,
             2
-        ]
+        ],
+        "offset": 4,
+        "description": "Adds (0, 1, 0) to the top of the stack"
     },
     "vector_reflection_ny": {
         "name": "Vector Reflection -Y",
@@ -87,7 +101,9 @@
             5,
             4,
             4
-        ]
+        ],
+        "offset": 5,
+        "description": "Adds (0, -1, 0) to the top of the stack"
     },
     "vector_reflection_pz": {
         "name": "Vector Reflection +Z",
@@ -100,7 +116,9 @@
             1,
             2,
             4
-        ]
+        ],
+        "offset": 4,
+        "description": "Adds (0, 0, 1) to the top of the stack"
     },
     "vector_reflection_nz": {
         "name": "Vector Reflection -Z",
@@ -113,7 +131,9 @@
             5,
             4,
             0
-        ]
+        ],
+        "offset": 5,
+        "description": "Adds (0, 0, -1) to the top of the stack"
     },
     "circle_reflection": {
         "name": "Circle's Reflection",
@@ -124,7 +144,9 @@
             5,
             3,
             4
-        ]
+        ],
+        "offset": 4,
+        "description": "Adds \u03c4, the radial representation of a complete circle, to the stack."
     },
     "arc_reflection": {
         "name": "Arc's Reflection",
@@ -135,7 +157,9 @@
             1,
             3,
             2
-        ]
+        ],
+        "offset": 5,
+        "description": "Adds \u03c0, the radial representation of half a circle, to the stack."
     },
     "euler_reflection": {
         "name": "Euler's Reflection",
@@ -144,7 +168,9 @@
             4,
             2,
             1
-        ]
+        ],
+        "offset": 0,
+        "description": "Adds e, the base of natural logarithms, to the stack."
     },
     "additive_distillation": {
         "name": "Additive Distillation",
@@ -154,7 +180,9 @@
             4,
             2,
             2
-        ]
+        ],
+        "offset": 5,
+        "description": "Performs Addition"
     },
     "subtractive_distillation": {
         "name": "Subtractive Distillation",
@@ -164,7 +192,9 @@
             2,
             4,
             4
-        ]
+        ],
+        "offset": 4,
+        "description": "Performs Subtraction"
     },
     "multiplicative_distillation": {
         "name": "Multiplicative Distillation",
@@ -175,7 +205,9 @@
             3,
             1,
             1
-        ]
+        ],
+        "offset": 1,
+        "description": "Perform multiplication or the dot product."
     },
     "division_distillation": {
         "name": "Division Distillation",
@@ -186,7 +218,9 @@
             3,
             5,
             5
-        ]
+        ],
+        "offset": 5,
+        "description": "Perform division or the cross product."
     },
     "length_purification": {
         "name": "Length Purification",
@@ -197,7 +231,9 @@
             3,
             2,
             2
-        ]
+        ],
+        "offset": 5,
+        "description": "Compute the absolute value or length."
     },
     "power_distillation": {
         "name": "Power Distillation",
@@ -208,7 +244,9 @@
             3,
             4,
             4
-        ]
+        ],
+        "offset": 4,
+        "description": "Perform exponentiation or vector projection."
     },
     "floor_purification": {
         "name": "Floor Purification",
@@ -217,7 +255,9 @@
             1,
             1,
             0
-        ]
+        ],
+        "offset": 0,
+        "description": "\"Floors\" a number, cutting off the fractional component and leaving an integer value. If passed a vector, instead floors each of its components."
     },
     "ceiling_purification": {
         "name": "Ceiling Purification",
@@ -227,7 +267,8 @@
             5,
             0
         ],
-        "offset": 0
+        "offset": 0,
+        "description": "\"Ceilings\" a number, raising it to the next integer value if it has a fractional componen. If passed a vector, instead ceils each of its components."
     },
     "vector_exaltation": {
         "name": "Vector Exaltation",
@@ -285,7 +326,8 @@
             5,
             5
         ],
-        "offset": 4
+        "offset": 4,
+        "description": "Coerce vector to nearest axial direction or return sign of number"
     },
     "entropy_reflection": {
         "name": "Entropy Reflection",
@@ -296,7 +338,8 @@
             5,
             4
         ],
-        "offset": 4
+        "offset": 4,
+        "description": "Creates a random number between 0 and 1"
     },
     "jesters_gambit": {
         "name": "Jester's Gambit",
@@ -308,7 +351,8 @@
             4,
             0
         ],
-        "offset": 0
+        "offset": 0,
+        "description": "Swaps the top two iotas on the stack"
     },
     "rotation_gambit": {
         "name": "Rotation Gambit",
@@ -320,7 +364,8 @@
             1,
             5
         ],
-        "offset": 0
+        "offset": 0,
+        "description": "Yanks the iota third from the top of the stack to the top"
     },
     "rotation_gambit_ii": {
         "name": "Rotation Gambit II",
@@ -332,7 +377,8 @@
             5,
             1
         ],
-        "offset": 5
+        "offset": 5,
+        "description": "Yanks the top iota to the third position"
     },
     "gemini_decomposition": {
         "name": "Gemini Decomposition",
@@ -344,7 +390,8 @@
             2,
             0
         ],
-        "offset": 0
+        "offset": 0,
+        "description": "Duplicates the top iota"
     },
     "prospectors_gambit": {
         "name": "Prospector's Gambit",
@@ -356,7 +403,8 @@
             5,
             1
         ],
-        "offset": 0
+        "offset": 0,
+        "description": "Copy the second-to-last iota to the top"
     },
     "undertakers_gambit": {
         "name": "Undertaker's Gambit",
@@ -368,7 +416,8 @@
             1,
             5
         ],
-        "offset": 0
+        "offset": 0,
+        "description": "Copy the top iota of the stack, put it under the second"
     },
     "gemini_gambit": {
         "name": "Gemini Gambit",
@@ -383,7 +432,8 @@
             0,
             4
         ],
-        "offset": 0
+        "offset": 0,
+        "description": "Removes the number at the top of the stack, copies the next iota that number of times"
     },
     "dioscuri_gambit": {
         "name": "Dioscuri Gambit",
@@ -398,7 +448,8 @@
             0,
             0
         ],
-        "offset": 0
+        "offset": 0,
+        "description": "Copy the top two iotas of the stack"
     },
     "flocks_reflection": {
         "name": "Flock's Reflection",
@@ -417,7 +468,8 @@
             3,
             1
         ],
-        "offset": 4
+        "offset": 4,
+        "description": "Pushes the size of the stack"
     },
     "fishermans_gambit": {
         "name": "Fisherman's Gambit",
@@ -428,7 +480,8 @@
             2,
             4
         ],
-        "offset": 3
+        "offset": 3,
+        "description": "Grabs the element in the stack indexed by the number and brings it to the top. If the number is negative, instead moves the top iota down that many elements"
     },
     "fishermans_gambit_ii": {
         "name": "Fisherman's Gambit II",
@@ -439,7 +492,8 @@
             4,
             2
         ],
-        "offset": 0
+        "offset": 0,
+        "description": "Like Fisherman's Gambit, but copies instead of moving"
     },
     "swindlers_gambit": {
         "name": "Swindler's Gambit",
@@ -453,7 +507,8 @@
             5,
             0
         ],
-        "offset": 1
+        "offset": 1,
+        "description": "Rearranges the top elements based on the provided Lehmer Code"
     },
     "augurs_purification": {
         "name": "Augur's Purification",

@@ -18,9 +18,9 @@ ADDSPELLMODE = False
 def checkspells(spells):
     for spell in spells:
         if not "offset" in spells[spell]:
-            print("spell without offset")
-        if not "description" in spells[spell]:
-            print(f"spell {spells[spell]["name"]} has no description given")
+            spells[spell]["offset"] = int(input(f"please input offset for spell {spells[spell]["name"]}"))
+        if not "description" in spells[spell] or spells[spell]["description"] == None:
+            spells[spell]["description"] = input(f"please input description for spell {spells[spell]["name"]} has no description given")
         if spells[spell]["directions"][0] != 0:
             offset = spells[spell]["directions"][0]
             spells[spell]["directions"] = [(direction-offset)%6 for direction in spells[spell]["directions"]]
@@ -387,7 +387,7 @@ class App:
         print("loading spells")
         with open("spells.json", "r") as f:
             self.spells = json.load(f)
-        #checkspells(self.spells)
+        checkspells(self.spells)
         self.currentstack = []
         self.spellerror = False
         self.consideration = False
