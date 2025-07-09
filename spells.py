@@ -386,8 +386,8 @@ def fishermans_gambit(currentstack, gameobj):
         currentstack.append("ERROR")
         return
     if num >= 0:
-        item = copy.deepcopy(currentstack[-num])
-        del currentstack[-num]
+        item = copy.deepcopy(currentstack[-num-1])
+        del currentstack[-num-1]
         currentstack.append(item)
     else:
         item = currentstack.pop()
@@ -668,7 +668,7 @@ def selection_exaltation(currentstack, gameobj):
 #Remove the element on top of the stack and add it to the list on top of the stack
 def integration_distillation(currentstack, gameobj):
     element = currentstack.pop()
-    container = currentstack.pop()
+    container = currentstack[-1]
     if type(container) != list:
         print("needs a list")
         currentstack.append("ERROR")
@@ -944,7 +944,6 @@ def uniqueness_purification(currentstack, gameobj):
 
 
 def elementtospell(element):
-    print(element)
     if type(element) != str:
         return None
     elif not element.startswith("<") or not element.endswith(">"):
@@ -969,10 +968,11 @@ def hermes_gambit(currentstack, gameobj):
        main.executespell(spell, currentstack, gameobj)
     elif type(patterns) == list:
         for pattern in patterns:
-            if gameobj.executiondepth < currentdepth:
-                return
-            spell = elementtospell(pattern)
-            main.executespell(spell, currentstack, gameobj)
+            if type(pattern) == str:
+                if gameobj.executiondepth < currentdepth:
+                    return
+                spell = elementtospell(pattern)
+                main.executespell(spell, currentstack, gameobj)
     gameobj.executiondepth -= 1
 
 
