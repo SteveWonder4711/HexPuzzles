@@ -10,8 +10,9 @@ CIRCLECOLOR = (100, 100, 255)
 LINEDRAWCOLOR = (204, 115, 255)
 LINECASTCOLOR = (66, 224, 245)
 LINEERRORCOLOR = (255, 0, 0)
+LINECONSIDEREDCOLOR = (245, 245, 66)
 LINEWIDTH = 7
-ADDSPELLMODE = True
+ADDSPELLMODE = False
 
 
 def eval_numerical_reflection(directions, startdirection):
@@ -98,7 +99,7 @@ def iotatostring(iota):
         #strings are used for patterns and other internal types
         if iota == "ERROR":
             return "".join(random.choices("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!§$%&/()=?\\ß*+-#'_.:,;", k=20))
-        return ""
+        return iota
     elif iota is None:
         return "Null"
     else:
@@ -139,11 +140,83 @@ def newspell(currentspells, spelldirections, offset):
     with open(f'spells.py', 'a') as f:
         f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack):\n    pass\n\n\n')
 
+def setconnectionsstate(state):
+    for connection in Game.connections:
+            if connection.state == "Drawing":
+                connection.state = state
 
-def executespell(spellid, currentstack):
-    spellfunction = getattr(spells, spellid)
-    spellfunction(currentstack)
 
+def executespell(currentspell, currentstack):
+    offset = currentspell[0]
+    normalspell = [(direction-offset)%6 for direction in currentspell]
+    print(currentspell)
+    if Game.consideration:
+        if Game.introspectionlevel > 0:
+            Game.introspectionlist.append(f"<{"".join([str(direction) for direction in currentspell])}>")
+        else:
+            currentstack.append(f"<{"".join([str(direction) for direction in currentspell])}>")
+        Game.consideration = False
+        setconnectionsstate("Considered")
+        return
+    validspell = True
+    validspell = False
+    tocast = None
+    for spell in Game.spells:
+        if Game.spells[spell]["directions"] == normalspell:
+            tocast = spell
+    if tocast == "consideration":
+        Game.consideration = True
+        setconnectionsstate("Cast")
+        return
+    elif tocast == "evanition":
+        if len(Game.introspectionlist) > 0:
+            Game.introspectionlist.pop()
+            setconnectionsstate("Considered")
+            return
+    elif tocast == "introspection":
+        if Game.introspectionlevel > 0:
+            Game.introspectionlist.append(f"<{''.join([str(direction) for direction in currentspell])}>")
+            setconnectionsstate("Considered")
+        else:
+            setconnectionsstate("Cast")
+        Game.introspectionlevel += 1
+        return
+    elif tocast == "retrospection":
+        Game.introspectionlevel -= 1
+        if Game.introspectionlevel > 0:
+            Game.introspectionlist.append(f"<{''.join([str(direction) for direction in currentspell])}>")
+            setconnectionsstate("Considered") 
+        else:
+            currentstack.append(Game.introspectionlist)
+            Game.introspectionlist = []
+            setconnectionsstate("Cast")
+        return
+    elif Game.introspectionlevel > 0:
+        Game.introspectionlist.append(f"<{''.join([str(direction) for direction in currentspell])}>")
+        setconnectionsstate("Considered")
+        return
+    elif tocast is not None: 
+        spellfunction = getattr(spells, tocast)
+        spellfunction(currentstack)
+    else:
+        check_numerical_reflection(normalspell, currentstack)
+        check_bookkeeper_gambit(normalspell, currentstack)
+
+    if not validspell or Game.spellerror:
+        if ADDSPELLMODE and not Game.spellerror:
+            newspell(Game.spells, currentspell, offset)
+            Game.connections = []
+        else:
+            print("there was an error or it was a wrong spell :<")
+            for connection in Game.connections:
+                if connection.state == "Drawing":
+                    connection.state = "Error"
+    else:
+        for connection in Game.connections:
+                if connection.state == "Drawing":
+                    connection.state = "Cast"      
+
+    
 
 def connectionexists(connections, startpoint, endpoint):
         for connection in connections:
@@ -265,6 +338,8 @@ class Connection:
             color = LINECASTCOLOR
         elif self.state == "Error":
             color = LINEERRORCOLOR
+        elif self.state == "Considered":
+            color = LINECONSIDEREDCOLOR
         else:
             color = (150, 150, 150)
         pygame.draw.line(surface, color, self.startpos, self.endpos, width=LINEWIDTH) 
@@ -298,7 +373,8 @@ class App:
         self.currentstack = []
         self.spellerror = False
         self.consideration = False
-        self.introspection = 0
+        self.introspectionlevel = 0
+        self.introspectionlist = []
  
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -319,32 +395,7 @@ class App:
                     if connection.state == "Drawing":
                         currentspell.append(connection.direction)
                 if len(currentspell) > 0:
-                    offset = currentspell[0]
-                    currentspell = [(direction-offset)%6 for direction in currentspell]
-                    validspell = True
-                    if not check_numerical_reflection(currentspell, self.currentstack):
-                        if not check_bookkeeper_gambit(currentspell, self.currentstack):
-                            validspell = False
-                            for spell in self.spells:
-                                if self.spells[spell]["directions"] == currentspell:
-                                    validspell = True
-                                    executespell(spell, self.currentstack)
-                    if not validspell or self.spellerror:
-                        if ADDSPELLMODE and not self.spellerror:
-                            newspell(self.spells, currentspell, offset)
-                            self.connections = []
-                        else:
-                            print("there was an error or it was a wrong spell :<")
-                            for connection in self.connections:
-                                if connection.state == "Drawing":
-                                    connection.state = "Error"
-                    else:
-                        for connection in self.connections:
-                                if connection.state == "Drawing":
-                                    connection.state = "Cast"      
-
-
-                                
+                   executespell(currentspell, self.currentstack) 
                 self.state = "Idle"
 
         elif event.type == pygame.MOUSEMOTION:
