@@ -12,7 +12,19 @@ LINECASTCOLOR = (66, 224, 245)
 LINEERRORCOLOR = (255, 0, 0)
 LINECONSIDEREDCOLOR = (245, 245, 66)
 LINEWIDTH = 7
-ADDSPELLMODE = False
+ADDSPELLMODE = True
+
+
+def checkspells(spells):
+    for spell in spells:
+        if not "offset" in spells[spell]:
+            print("spell without offset")
+        if not "description" in spells[spell]:
+            print(f"spell {spells[spell]["name"]} has no description given")
+        if spells[spell]["directions"][0] != 0:
+            offset = spells[spell]["directions"][0]
+            spells[spell]["directions"] = [(direction-offset)%6 for direction in spells[spell]["directions"]]
+            print(f"normalised {spells[spell]["name"]}")
 
 
 def eval_numerical_reflection(directions, startdirection):
@@ -138,7 +150,7 @@ def newspell(currentspells, spelldirections, offset):
         "description": description
     }
     with open(f'spells.py', 'a') as f:
-        f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack):\n    pass\n\n\n')
+        f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack, gameobj):\n    pass\n\n\n')
 
 def setconnectionsstate(state):
     for connection in Game.connections:
@@ -147,9 +159,9 @@ def setconnectionsstate(state):
 
 
 def executespell(currentspell, currentstack):
+    Game.spellerror = False
     offset = currentspell[0]
     normalspell = [(direction-offset)%6 for direction in currentspell]
-    print(currentspell)
     if Game.consideration:
         if Game.introspectionlevel > 0:
             Game.introspectionlist.append(f"<{"".join([str(direction) for direction in currentspell])}>")
@@ -158,12 +170,11 @@ def executespell(currentspell, currentstack):
         Game.consideration = False
         setconnectionsstate("Considered")
         return
-    validspell = True
-    validspell = False
     tocast = None
     for spell in Game.spells:
         if Game.spells[spell]["directions"] == normalspell:
             tocast = spell
+    #Certain spells which need Game Object
     if tocast == "consideration":
         Game.consideration = True
         setconnectionsstate("Cast")
@@ -197,24 +208,24 @@ def executespell(currentspell, currentstack):
         return
     elif tocast is not None: 
         spellfunction = getattr(spells, tocast)
-        spellfunction(currentstack)
+        spellfunction(currentstack, Game)
     else:
-        check_numerical_reflection(normalspell, currentstack)
-        check_bookkeeper_gambit(normalspell, currentstack)
+        if check_numerical_reflection(normalspell, currentstack):
+            setconnectionsstate("Cast")
+            return
+        if check_bookkeeper_gambit(normalspell, currentstack):
+            setconnectionsstate("Cast")
+            return
 
-    if not validspell or Game.spellerror:
+    if tocast is None or Game.spellerror:
         if ADDSPELLMODE and not Game.spellerror:
-            newspell(Game.spells, currentspell, offset)
+            newspell(Game.spells, normalspell, offset)
             Game.connections = []
         else:
             print("there was an error or it was a wrong spell :<")
-            for connection in Game.connections:
-                if connection.state == "Drawing":
-                    connection.state = "Error"
+            setconnectionsstate("Error")
     else:
-        for connection in Game.connections:
-                if connection.state == "Drawing":
-                    connection.state = "Cast"      
+        setconnectionsstate("Cast")      
 
     
 
@@ -370,11 +381,15 @@ class App:
         print("loading spells")
         with open("spells.json", "r") as f:
             self.spells = json.load(f)
+        #checkspells(self.spells)
         self.currentstack = []
         self.spellerror = False
         self.consideration = False
         self.introspectionlevel = 0
         self.introspectionlist = []
+        self.levelinputs = []
+        self.leveloutputs = []
+        self.ravenmind = []
  
     def on_event(self, event):
         if event.type == pygame.QUIT:

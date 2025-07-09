@@ -831,5 +831,262 @@
         ],
         "offset": 0,
         "description": "Removes the last pattern that was drawn Inside Intro- and Retrospection"
+    },
+    "scribes_reflection": {
+        "name": "Scribe's Reflection",
+        "directions": [
+            0,
+            4,
+            3,
+            2,
+            1,
+            0,
+            5
+        ],
+        "offset": 0,
+        "description": "Pushes an iota from the level input onto the stack"
+    },
+    "scribes_gambit": {
+        "name": "Scribe's Gambit",
+        "directions": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            0,
+            1
+        ],
+        "offset": 0,
+        "description": "Removes the top iota and outputs it"
+    },
+    "huginns_gambit": {
+        "name": "Huginn's Gambit",
+        "directions": [
+            0,
+            1,
+            0,
+            5,
+            5,
+            3,
+            3,
+            2,
+            0,
+            4,
+            4
+        ],
+        "offset": 4,
+        "description": "Removes the top iota from the stack and saves it to my ravenmind."
+    },
+    "munnins_reflection": {
+        "name": "Munnin's Reflection",
+        "directions": [
+            0,
+            5,
+            0,
+            1,
+            1,
+            3,
+            3,
+            4,
+            0,
+            2,
+            2
+        ],
+        "offset": 5,
+        "description": "Copy the iota out of my ravenmind and push it onto the stack."
+    },
+    "sine_purification": {
+        "name": "Sine Purification",
+        "directions": [
+            0,
+            5,
+            4,
+            3,
+            2,
+            1,
+            5,
+            3
+        ],
+        "offset": 1,
+        "description": "Takes the sine of an angle in radians."
+    },
+    "cosine_purification": {
+        "name": "Cosine Purification",
+        "directions": [
+            0,
+            5,
+            4,
+            3,
+            2,
+            1,
+            5,
+            1
+        ],
+        "offset": 1,
+        "description": "Takes the cosine of an angle in radians."
+    },
+    "tanent_purification": {
+        "name": "Tanent Purification",
+        "directions": [
+            0,
+            0,
+            5,
+            4,
+            3,
+            2,
+            1,
+            5,
+            1,
+            0
+        ],
+        "offset": 2,
+        "description": "Takes the tangent of an angle in radians."
+    },
+    "inverse_sine_purification": {
+        "name": "Inverse Sine Purification",
+        "directions": [
+            0,
+            2,
+            4,
+            5,
+            0,
+            1,
+            2,
+            3
+        ],
+        "offset": 1,
+        "description": "Takes the inverse sine value of a value bbetween -1 and 1"
+    },
+    "inverse_cosine_purification": {
+        "name": "Inverse Cosine Purification",
+        "directions": [
+            0,
+            4,
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+        ],
+        "offset": 5,
+        "description": "Takes the inverse cosine value of a number between -1 and 1"
+    },
+    "inverse_tangent_purification": {
+        "name": "Takes the inverse tangent of a value",
+        "directions": [
+            0,
+            1,
+            5,
+            1,
+            2,
+            3,
+            4,
+            5,
+            0,
+            0
+        ],
+        "offset": 5,
+        "description": "Takes the inverse tangent of a value"
+    },
+    "inverse_tangent_distillation": {
+        "name": "Inverse Tangent Distillation",
+        "directions": [
+            0,
+            2,
+            3,
+            1,
+            3,
+            4,
+            5,
+            0,
+            1,
+            2,
+            2,
+            4
+        ],
+        "offset": 3,
+        "description": "Takes the inverse tangent of a Y and X value"
+    },
+    "logarithmic_distillation": {
+        "name": "Logarithmic Distillation",
+        "directions": [
+            0,
+            1,
+            0,
+            4,
+            3,
+            4
+        ],
+        "offset": 4,
+        "description": "Takes the logarithm with the base on the top of the stack of the number second to the top of the stack."
+    },
+    "uniqueness_purification": {
+        "name": "Uniqueness Purification",
+        "directions": [
+            0,
+            4,
+            4,
+            5,
+            3,
+            2,
+            0
+        ],
+        "offset": 5,
+        "description": "Removes duplicate entries from a list"
+    },
+    "hermes_gambit": {
+        "name": "Hermes' Gambit",
+        "directions": [
+            0,
+            2,
+            3,
+            1,
+            0,
+            5
+        ],
+        "offset": 1,
+        "description": "Remove a pattern or list of petterns and cast them, escaped patterns get pushed to the stack."
+    },
+    "iris_gambit": {
+        "name": "Iris' Gambit",
+        "directions": [
+            0,
+            5,
+            5,
+            3,
+            2,
+            4,
+            5
+        ],
+        "offset": 4,
+        "description": "Like Hermes' Gambit, but push a Jump iota that when executed jumps directly to the end of the pattern list."
+    },
+    "thots_gambit": {
+        "name": "Thot's Gambit",
+        "directions": [
+            0,
+            2,
+            0,
+            2,
+            0,
+            2
+        ],
+        "offset": 5,
+        "description": "Cast the list of patterns atthe top of the stack once for every element of the second list. Push Iotas remaining after every element on the main stack"
+    },
+    "charons_gambit": {
+        "name": "Charon's Gambit",
+        "directions": [
+            0,
+            4,
+            3,
+            5,
+            0,
+            1
+        ],
+        "offset": 2,
+        "description": "Forcibly halts a Hex. Only exits one Iteration of Thot's Gambit"
     }
 }
