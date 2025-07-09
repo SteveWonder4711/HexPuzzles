@@ -756,3 +756,27 @@ def speakers_decomposition(currentstack):
     currentstack.append(element)
 
 
+#Consideration
+#Pushes the next pattern drawn onto the stack
+def consideration(currentstack):
+    pass
+
+
+#Introspection
+#Pushes the next patterns onto the stack, until i draw Retrospection
+def introspection(currentstack):
+    pass
+
+
+#Retrospection
+#Ends the effect of Introspection. If two Introspections were drawn, two Retrospections have to be drawn
+def retrospection(currentstack):
+    pass
+
+
+#Evanition
+#Removes the last pattern that was drawn Inside Intro- and Retrospection
+def evanition(currentstack):
+    pass
+
+

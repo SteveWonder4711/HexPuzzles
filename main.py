@@ -11,7 +11,7 @@ LINEDRAWCOLOR = (204, 115, 255)
 LINECASTCOLOR = (66, 224, 245)
 LINEERRORCOLOR = (255, 0, 0)
 LINEWIDTH = 7
-ADDSPELLMODE = False
+ADDSPELLMODE = True
 
 
 def eval_numerical_reflection(directions, startdirection):
@@ -145,6 +145,14 @@ def executespell(spellid, currentstack):
     spellfunction(currentstack)
 
 
+def connectionexists(connections, startpoint, endpoint):
+        for connection in connections:
+            if (    connection.startpoint == startpoint and connection.endpoint == endpoint 
+                 or connection.endpoint == startpoint and connection.startpoint == endpoint
+               ):
+                return connection
+
+
 
 def generatepoints():
     points = []
@@ -162,7 +170,39 @@ def generatepoints():
         y += 1
     return points
 
-       
+def getpoints(points, row, column):
+    for point in points:
+        if point.row == row and point.column == column:
+            return Point
+    return None
+
+def gethoveredpoint(points, mousex, mousey):
+    for point in points:
+        if math.sqrt((point.xpos - mousex)**2 + (point.ypos - mousey)**2) < Game.pointdistance*0.4:
+            return point
+
+def pointsadjacent(point1, point2):
+    x1 = point1.column
+    y1 = point1.row
+    x2 = point2.column
+    y2 = point2.row
+    if abs(y1 - y2) == 1: #above to each other
+        if (    y1%2 == 0 and x1 - x2 == 1
+                or y1%2 == 1 and x1 - x2 == -1
+                or x1 == x2
+            ):
+            return True
+    elif y1 == y2 and abs(x1 - x2) == 1:
+            return True
+    return False
+
+def isbacktrack(connections, currentpoint, newpoint):
+        if len(connections) == 0:
+            return False
+        lastconnect = connections[-1]
+        if lastconnect.startpoint == newpoint and lastconnect.endpoint == currentpoint:
+            return True
+    
 class Point:
     def __init__(self, row, column):
         self.position = (column, row)
@@ -174,31 +214,7 @@ class Point:
     def draw(self, surface):
         pygame.draw.circle(surface, CIRCLECOLOR, [self.xpos, self.ypos], 5)
 
-    def get(points, row, column):
-        for point in points:
-            if point.row == row and point.column == column:
-                return Point
-        return None
 
-    def gethovered(points, mousex, mousey):
-        for point in points:
-            if math.sqrt((point.xpos - mousex)**2 + (point.ypos - mousey)**2) < Game.pointdistance*0.4:
-                return point
-
-    def isadjacent(point1, point2):
-        x1 = point1.column
-        y1 = point1.row
-        x2 = point2.column
-        y2 = point2.row
-        if abs(y1 - y2) == 1: #above to each other
-            if (    y1%2 == 0 and x1 - x2 == 1
-                 or y1%2 == 1 and x1 - x2 == -1
-                 or x1 == x2
-              ):
-                return True
-        elif y1 == y2 and abs(x1 - x2) == 1:
-                return True
-        return False
 
 
 
@@ -254,20 +270,7 @@ class Connection:
         pygame.draw.line(surface, color, self.startpos, self.endpos, width=LINEWIDTH) 
 
 
-    def exists(connections, startpoint, endpoint):
-        for connection in connections:
-            if (    connection.startpoint == startpoint and connection.endpoint == endpoint 
-                 or connection.endpoint == startpoint and connection.startpoint == endpoint
-               ):
-                return connection
-
-    def isbacktrack(connections, currentpoint, newpoint):
-        if len(connections) == 0:
-            return False
-        lastconnect = connections[-1]
-        if lastconnect.startpoint == newpoint and lastconnect.endpoint == currentpoint:
-            return True
-
+        
 
 class App:
     def __init__(self):
@@ -286,14 +289,16 @@ class App:
         self.font = pygame.font.Font('font.ttf', 32)
         self.state = "Idle"
         self.pointdistance = self.height//11
-        self.points = generatepoints()
+        self.points: list[Point]  = generatepoints()
         self.currentpoint = None
-        self.connections = []
+        self.connections: list[Connection] = []
         print("loading spells")
         with open("spells.json", "r") as f:
             self.spells = json.load(f)
         self.currentstack = []
         self.spellerror = False
+        self.consideration = False
+        self.introspection = 0
  
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -302,9 +307,9 @@ class App:
                 f.write(json.dumps(self.spells, indent=4))
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mousex, mousey = event.pos
-            if event.button == 1 and self.state == "Idle" and Point.gethovered(self.points, mousex, mousey):
+            if event.button == 1 and self.state == "Idle" and gethoveredpoint(self.points, mousex, mousey):
                 self.state = "Casting"
-                self.currentpoint = Point.gethovered(self.points, mousex, mousey)
+                self.currentpoint = gethoveredpoint(self.points, mousex, mousey)
 
         elif event.type == pygame.MOUSEBUTTONUP:
             self.spellerror = False
@@ -345,13 +350,13 @@ class App:
         elif event.type == pygame.MOUSEMOTION:
             mousex, mousey = event.pos
             if self.state == "Casting":
-                newpoint = Point.gethovered(self.points, mousex, mousey)
+                newpoint = gethoveredpoint(self.points, mousex, mousey)
                 if newpoint != self.currentpoint and newpoint != None:
-                    if Point.isadjacent(self.currentpoint, newpoint):
-                        if Connection.isbacktrack(self.connections, self.currentpoint, newpoint):
+                    if pointsadjacent(self.currentpoint, newpoint):
+                        if isbacktrack(self.connections, self.currentpoint, newpoint):
                             self.connections.pop()
                             self.currentpoint = newpoint
-                        elif not Connection.exists(self.connections, self.currentpoint, newpoint):
+                        elif not connectionexists(self.connections, self.currentpoint, newpoint):
                             self.connections.append(Connection(self.currentpoint, newpoint))
                             self.currentpoint = newpoint
 
@@ -359,7 +364,7 @@ class App:
 
             
     def on_loop(self):
-        mousex, mousey = pygame.mouse.get_pos()
+        pass
     def on_render(self):
         self._display_surf.fill((0, 0, 0))
         mousex, mousey = pygame.mouse.get_pos()

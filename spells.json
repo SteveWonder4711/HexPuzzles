@@ -783,5 +783,53 @@
         ],
         "offset": 2,
         "description": "Remove the first element of the list at the top of the stack and push it to the stack."
+    },
+    "consideration": {
+        "name": "Consideration",
+        "directions": [
+            0,
+            5,
+            4,
+            3,
+            1,
+            1
+        ],
+        "offset": 3,
+        "description": "Pushes the next pattern drawn onto the stack"
+    },
+    "introspection": {
+        "name": "Introspection",
+        "directions": [
+            0,
+            5,
+            4,
+            3
+        ],
+        "offset": 3,
+        "description": "Pushes the next patterns onto the stack, until i draw Retrospection"
+    },
+    "retrospection": {
+        "name": "Retrospection",
+        "directions": [
+            0,
+            1,
+            2,
+            3
+        ],
+        "offset": 0,
+        "description": "Ends the effect of Introspection. If two Introspections were drawn, two Retrospections have to be drawn"
+    },
+    "evanition": {
+        "name": "Evanition",
+        "directions": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            5
+        ],
+        "offset": 0,
+        "description": "Removes the last pattern that was drawn Inside Intro- and Retrospection"
     }
 }
