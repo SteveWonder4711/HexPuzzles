@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import copy
+import main
 
 #TODO: Add more safety and mishap detection
 
@@ -942,27 +943,84 @@ def uniqueness_purification(currentstack, gameobj):
     currentstack.append(newlist)
 
 
+def elementtospell(element):
+    print(element)
+    if type(element) != str:
+        return None
+    elif not element.startswith("<") or not element.endswith(">"):
+        print("wrong formatted pattern")
+        return None
+    else:
+        spell = []
+        for letter in element:
+            if letter not in ["<", ">"]:
+                spell.append(int(letter))
+        return spell
+
+
 #Hermes' Gambit
 #Remove a pattern or list of petterns and cast them, escaped patterns get pushed to the stack.
 def hermes_gambit(currentstack, gameobj):
-    pass
+    gameobj.executiondepth += 1
+    currentdepth = gameobj.executiondepth
+    patterns = currentstack.pop()
+    if type(patterns) == str:
+       spell = elementtospell(patterns)
+       main.executespell(spell, currentstack, gameobj)
+    elif type(patterns) == list:
+        for pattern in patterns:
+            if gameobj.executiondepth < currentdepth:
+                return
+            spell = elementtospell(pattern)
+            main.executespell(spell, currentstack, gameobj)
+    gameobj.executiondepth -= 1
 
 
 #Iris' Gambit
 #Like Hermes' Gambit, but push a Jump iota that when executed jumps directly to the end of the pattern list.
 def iris_gambit(currentstack, gameobj):
-    pass
+    print("sorry did not implement that yet")
 
 
 #Thot's Gambit
 #Cast the list of patterns atthe top of the stack once for every element of the second list. Push Iotas remaining after every element on the main stack
 def thots_gambit(currentstack, gameobj):
-    pass
+    container = currentstack.pop()
+    patterns = currentstack.pop()
+    if type(patterns) != list or type(container) != list:
+        print("needs a list of patterns and another list")
+        currentstack.append("ERROR")
+        return
+    output = []
+    for element in container:
+        print(f"thotting {element}")
+        skip = False
+        gameobj.executiondepth += 1
+        currentdepth = gameobj.executiondepth
+        tempstack = copy.deepcopy(currentstack)
+        tempstack.append(element)
+        for pattern in patterns:
+            if gameobj.executiondepth < currentdepth:
+                skip = True
+                break
+            spell = elementtospell(pattern)
+            main.executespell(spell, tempstack, gameobj)
+        if not skip:
+            for element in tempstack:
+                output.append(element)
+    print(output)
+    currentstack.append(output)
+        
+
+
+
+
+
 
 
 #Charon's Gambit
 #Forcibly halts a Hex. Only exits one Iteration of Thot's Gambit
 def charons_gambit(currentstack, gameobj):
-    pass
+    gameobj.executiondepth -= 1
 
 
