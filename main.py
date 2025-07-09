@@ -12,7 +12,7 @@ LINECASTCOLOR = (66, 224, 245)
 LINEERRORCOLOR = (255, 0, 0)
 LINECONSIDEREDCOLOR = (245, 245, 66)
 LINEWIDTH = 7
-ADDSPELLMODE = True
+ADDSPELLMODE = False
 
 
 def checkspells(spells):
@@ -132,7 +132,7 @@ def drawstack(currentstack, gamesurface, stacksurface):
         textRect.center = (textRect.width//2, round(textRect.height*(len(currentstack)-i-0.5)))
         stacksurface.blit(text, textRect)
         i -= 1
-    gamesurface.blit(stacksurface, (0, 0))
+    gamesurface.blit(stacksurface, (32, 32))
 
 
 
@@ -296,7 +296,10 @@ class Point:
         self.ypos = Game.pointdistance/4+row*math.sqrt(Game.pointdistance**2-(Game.pointdistance/2)**2)
 
     def draw(self, surface):
-        pygame.draw.circle(surface, CIRCLECOLOR, [self.xpos, self.ypos], 5)
+        mousex, mousey = pygame.mouse.get_pos()
+        distance = math.sqrt((self.xpos - mousex)**2 + (self.ypos - mousey)**2)
+        circlesize = max(1, math.floor(7-distance/40))
+        pygame.draw.circle(surface, CIRCLECOLOR, [self.xpos, self.ypos], circlesize)
 
 
 
@@ -371,10 +374,10 @@ class App:
             self._display_surf = pygame.display.set_mode((0,0))
         self.size = self.width, self.height = self._display_surf.get_size()
         self._running = True
-        self.stacksurf = pygame.Surface((self.width*0.2, self.height), pygame.SRCALPHA)
+        self.stacksurf = pygame.Surface((self.width*0.2, self.height-64), pygame.SRCALPHA)
         self.font = pygame.font.Font('font.ttf', 32)
         self.state = "Idle"
-        self.pointdistance = self.height//11
+        self.pointdistance = self.height//16
         self.points: list[Point]  = generatepoints()
         self.currentpoint = None
         self.connections: list[Connection] = []
