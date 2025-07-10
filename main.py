@@ -4,6 +4,7 @@ import math
 import json
 import spells
 import random
+import time 
 
 
 CIRCLECOLOR = (100, 100, 255)
@@ -84,7 +85,7 @@ def check_bookkeeper_gambit(directions, currentstack, gameobj):
                 bookkeeper.append(0)
             else:
                 return False
-    
+    bookkeeper.reverse() 
     if len(bookkeeper) > len(currentstack):
         gameobj.spellerror = True
         return True
@@ -100,7 +101,7 @@ def iotatostring(iota):
     if type(iota) in [int,float,bool]:
         return str(iota)
     elif type(iota) == tuple: 
-        return "({}, {}, {})".format(*[math.floor(element*1000)/1000 for element in list(iota)])
+        return "({:.2f}, {:.2f}, {:.2f})".format(*iota)
     elif type(iota) == list:
         string = "["
         for i in range(len(iota)):
@@ -305,9 +306,6 @@ class Point:
             pygame.draw.circle(surface, CIRCLECOLOR, [self.xpos, self.ypos], circlesize)
 
 
-
-
-
 class Connection:
     def __init__(self, startpoint, endpoint):
         self.startpoint = startpoint
@@ -360,8 +358,12 @@ class Connection:
         else:
             color = (150, 150, 150)
         pygame.draw.line(surface, color, self.startpos, self.endpos, width=LINEWIDTH) 
-
-
+        if Game.directionrender:
+            portion = Game.deltatime/1e+9%1
+            endpart = portion+0.1
+            blinkstart = (self.endx*portion+self.startx*(1-portion), self.endy*portion+self.starty*(1-portion))
+            blinkend = (self.endx*endpart+self.startx*(1-endpart), self.endy*endpart+self.starty*(1-endpart))
+            pygame.draw.line(surface, (255, 255, 255), blinkstart, blinkend, width=LINEWIDTH) 
         
 
 class App:
@@ -388,13 +390,18 @@ class App:
         with open("spells.json", "r") as f:
             self.spells = json.load(f)
         checkspells(self.spells)
+        self.starttime = time.time_ns()
+        self.deltatime = 0
         self.currentstack = []
         self.spellerror = False
+        self.directionrender = False
         self.consideration = False
         self.introspectionlevel = 0
         self.introspectionlist = []
         self.levelinputs = []
         self.leveloutputs = []
+        self.expectedoutputs = []
+        self.writtenspell = []
         self.ravenmind = []
         self.executiondepth = 0
  
@@ -417,7 +424,8 @@ class App:
                     if connection.state == "Drawing":
                         currentspell.append(connection.direction)
                 if len(currentspell) > 0:
-                   executespell(currentspell, self.currentstack, self) 
+                    self.writtenspell.append(currentspell)
+                    executespell(currentspell, self.currentstack, self) 
                 self.state = "Idle"
 
         elif event.type == pygame.MOUSEMOTION:
@@ -433,11 +441,19 @@ class App:
                             self.connections.append(Connection(self.currentpoint, newpoint))
                             self.currentpoint = newpoint
 
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LCTRL:
+                self.directionrender = True
+
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LCTRL:
+                self.directionrender = False
+
                 
 
             
     def on_loop(self):
-        pass
+        self.deltatime = time.time_ns() - self.starttime
     def on_render(self):
         self._display_surf.fill((0, 0, 0))
         mousex, mousey = pygame.mouse.get_pos()

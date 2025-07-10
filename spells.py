@@ -2,6 +2,7 @@ import math
 import numpy as np
 import copy
 import main
+import time
 
 #TODO: Add more safety and mishap detection
 
@@ -972,6 +973,7 @@ def hermes_gambit(currentstack, gameobj):
                     return
                 spell = elementtospell(pattern)
                 main.executespell(spell, currentstack, gameobj)
+    print(f"stack at end: {currentstack}")
     gameobj.executiondepth -= 1
 
 
