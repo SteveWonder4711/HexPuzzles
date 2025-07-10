@@ -85,16 +85,18 @@ def check_bookkeeper_gambit(directions, currentstack, gameobj):
                 bookkeeper.append(0)
             else:
                 return False
-    bookkeeper.reverse() 
     if len(bookkeeper) > len(currentstack):
         gameobj.spellerror = True
         return True
-    newstack = currentstack[:-len(bookkeeper)]
-    affected = currentstack[-len(bookkeeper):]
-    for i in range(len(bookkeeper)):
-        if bookkeeper[i] == 1:
-            newstack.append(affected[i])
-    gameobj.currentstack = newstack 
+    bookkeepindex = 0
+    stackindex = -1
+    for _ in range(len(bookkeeper)):
+        if bookkeeper[bookkeepindex] == 0:
+            print(f"deleting {stackindex}")
+            del currentstack[stackindex]
+        else:
+            stackindex -= 1
+        bookkeepindex += 1
     return True
 
 def iotatostring(iota):
