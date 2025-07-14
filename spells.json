@@ -1143,5 +1143,17 @@
         ],
         "offset": 2,
         "description": "Forcibly halts a Hex. Only exits one Iteration of Thot's Gambit"
+    },
+    "reset": {
+        "name": "Reset",
+        "directions": [
+            0,
+            0,
+            2,
+            4,
+            2
+        ],
+        "offset": 4,
+        "description": "Resets the game >:3"
     }
 }

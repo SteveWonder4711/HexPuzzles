@@ -993,7 +993,6 @@ def thots_gambit(currentstack, gameobj):
         return
     output = []
     for element in container:
-        print(f"thotting {element}")
         skip = False
         gameobj.executiondepth += 1
         currentdepth = gameobj.executiondepth
@@ -1004,17 +1003,12 @@ def thots_gambit(currentstack, gameobj):
                 skip = True
                 break
             spell = elementtospell(pattern)
-            main.executespell(spell, tempstack, gameobj)
+        main.executespell(spell, tempstack, gameobj)
         if not skip:
             for element in tempstack:
                 output.append(element)
     print(output)
     currentstack.append(output)
-        
-
-
-
-
 
 
 
@@ -1022,5 +1016,11 @@ def thots_gambit(currentstack, gameobj):
 #Forcibly halts a Hex. Only exits one Iteration of Thot's Gambit
 def charons_gambit(currentstack, gameobj):
     gameobj.executiondepth -= 1
+
+
+#Reset
+#Resets the game >:3
+def reset(currentstack, gameobj):
+    gameobj.on_init()
 
 

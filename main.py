@@ -9,11 +9,11 @@ import time
 
 CIRCLECOLOR = (100, 100, 255)
 LINEDRAWCOLOR = (204, 115, 255)
-LINECASTCOLOR = (66, 224, 245)
+LINECASTCOLOR = (0, 208, 255)
 LINEERRORCOLOR = (255, 0, 0)
 LINECONSIDEREDCOLOR = (245, 245, 66)
 LINEWIDTH = 7
-ADDSPELLMODE = False
+ADDSPELLMODE = False 
 
 
 def checkspells(spells):
@@ -158,12 +158,14 @@ def newspell(currentspells, spelldirections, offset):
         f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack, gameobj):\n    pass\n\n\n')
 
 def setconnectionsstate(state, gameobj):
-    for connection in gameobj.connections:
+    for connection in gameobj.castspells[-1]:
             if connection.state == "Drawing":
                 connection.state = state
 
 
 def executespell(currentspell, currentstack, gameobj):
+    gameobj.castspells.append(gameobj.currentconnections)
+    gameobj.currentconnections = []
     gameobj.spellerror = False
     offset = currentspell[0]
     normalspell = [(direction-offset)%6 for direction in currentspell]
@@ -225,22 +227,41 @@ def executespell(currentspell, currentstack, gameobj):
     if tocast is None or gameobj.spellerror:
         if ADDSPELLMODE and not gameobj.spellerror:
             newspell(gameobj.spells, normalspell, offset)
-            gameobj.connections = []
+            gameobj.currentconnections = []
         else:
             print("there was an error or it was a wrong spell :<")
             setconnectionsstate("Error", gameobj)
     else:
-        setconnectionsstate("Cast", gameobj)      
+        setconnectionsstate("Cast", gameobj)
 
-    
+        
 
-def connectionexists(connections, startpoint, endpoint):
-        for connection in connections:
+def connectionexists(currentconnections, castspells, startpoint, endpoint):
+    for connection in currentconnections:
+        if (    connection.startpoint == startpoint and connection.endpoint == endpoint 
+                or connection.endpoint == startpoint and connection.startpoint == endpoint
+            ):
+            return connection
+    for spell in castspells:
+        for connection in spell:
             if (    connection.startpoint == startpoint and connection.endpoint == endpoint 
-                 or connection.endpoint == startpoint and connection.startpoint == endpoint
-               ):
+                    or connection.endpoint == startpoint and connection.startpoint == endpoint
+                ):
                 return connection
 
+def pointhasconnection(currentconnections, castspells, point):
+    for connection in currentconnections:
+        if (    connection.startpoint == point 
+                or connection.endpoint == point
+            ):
+            return True
+    for spell in castspells:
+        for connection in spell:
+            if (    connection.startpoint == point
+                    or connection.endpoint == point
+                ):
+                return True
+    return False
 
 
 def generatepoints():
@@ -348,7 +369,7 @@ class Connection:
                 else:
                     self.direction = 5
 
-    def draw(self, surface):
+    def draw(self, surface, length, index):
         if self.state == "Drawing":
             color = LINEDRAWCOLOR
         elif self.state == "Cast":
@@ -359,6 +380,8 @@ class Connection:
             color = LINECONSIDEREDCOLOR
         else:
             color = (150, 150, 150)
+        if Game.directionrender:
+            color = tuple([value*(1-index/(length-1))+(255*0.75+value*0.25)*(index/(length-1)) for value in color])
         pygame.draw.line(surface, color, self.startpos, self.endpos, width=LINEWIDTH) 
         if Game.directionrender:
             portion = Game.deltatime/1e+9%1
@@ -366,7 +389,7 @@ class Connection:
             blinkstart = (self.endx*portion+self.startx*(1-portion), self.endy*portion+self.starty*(1-portion))
             blinkend = (self.endx*endpart+self.startx*(1-endpart), self.endy*endpart+self.starty*(1-endpart))
             pygame.draw.line(surface, (255, 255, 255), blinkstart, blinkend, width=LINEWIDTH) 
-        
+            
 
 class App:
     def __init__(self):
@@ -387,7 +410,8 @@ class App:
         self.pointdistance = self.height//16
         self.points: list[Point]  = generatepoints()
         self.currentpoint = None
-        self.connections: list[Connection] = []
+        self.currentconnections: list[Connection] = []
+        self.castspells: list[list[Connection]] = []
         print("loading spells")
         with open("spells.json", "r") as f:
             self.spells = json.load(f)
@@ -422,7 +446,7 @@ class App:
             self.spellerror = False
             if event.button == 1 and self.state == "Casting":
                 currentspell = []
-                for connection in self.connections:
+                for connection in self.currentconnections:
                     if connection.state == "Drawing":
                         currentspell.append(connection.direction)
                 if len(currentspell) > 0:
@@ -436,11 +460,11 @@ class App:
                 newpoint = gethoveredpoint(self.points, mousex, mousey)
                 if newpoint != self.currentpoint and newpoint != None:
                     if pointsadjacent(self.currentpoint, newpoint):
-                        if isbacktrack(self.connections, self.currentpoint, newpoint):
-                            self.connections.pop()
+                        if isbacktrack(self.currentconnections, self.currentpoint, newpoint):
+                            self.currentconnections.pop()
                             self.currentpoint = newpoint
-                        elif not connectionexists(self.connections, self.currentpoint, newpoint):
-                            self.connections.append(Connection(self.currentpoint, newpoint))
+                        elif not connectionexists(self.currentconnections, self.castspells, self.currentpoint, newpoint):
+                            self.currentconnections.append(Connection(self.currentpoint, newpoint))
                             self.currentpoint = newpoint
 
         elif event.type == pygame.KEYDOWN:
@@ -464,8 +488,12 @@ class App:
         
         for point in self.points:
             point.draw(self._display_surf)
-        for connection in self.connections:
-            connection.draw(self._display_surf)
+
+        for i, connection in enumerate(self.currentconnections):
+            connection.draw(self._display_surf, len(self.currentconnections), i)
+        for spell in self.castspells:
+            for i, connection in enumerate(spell):
+                connection.draw(self._display_surf, len(spell), i)
         if len(self.currentstack) > 0:
                drawstack(self.currentstack, self._display_surf, self.stacksurf)
         pygame.display.flip()
