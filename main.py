@@ -100,9 +100,11 @@ def check_bookkeeper_gambit(directions, currentstack, gameobj):
     return True
 
 def iotatostring(iota):
-    if type(iota) in [int,float,bool]:
+    if type(iota) in [int,float]:
+        return "{:.2f}".format(iota)
+    elif type(iota) == bool:
         return str(iota)
-    elif type(iota) == tuple: 
+    elif type(iota) == tuple:
         return "({:.2f}, {:.2f}, {:.2f})".format(*iota)
     elif type(iota) == list:
         string = "["
@@ -158,7 +160,8 @@ def newspell(currentspells, spelldirections, offset):
         f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack, gameobj):\n    pass\n\n\n')
 
 def setconnectionsstate(state, gameobj):
-    for connection in gameobj.castspells[-1]:
+    if len(gameobj.castspells) > 0:
+        for connection in gameobj.castspells[-1]:
             if connection.state == "Drawing":
                 connection.state = state
 
@@ -177,7 +180,7 @@ def executespell(currentspell, currentstack, gameobj):
         gameobj.consideration = False
         setconnectionsstate("Considered", gameobj)
         return
-    tocast = None
+    tocast = None 
     for spell in gameobj.spells:
         if gameobj.spells[spell]["directions"] == normalspell:
             tocast = spell
@@ -384,11 +387,12 @@ class Connection:
             color = tuple([value*(1-index/(length-1))+(255*0.75+value*0.25)*(index/(length-1)) for value in color])
         pygame.draw.line(surface, color, self.startpos, self.endpos, width=LINEWIDTH) 
         if Game.directionrender:
-            portion = Game.deltatime/1e+9%1
-            endpart = portion+0.1
-            blinkstart = (self.endx*portion+self.startx*(1-portion), self.endy*portion+self.starty*(1-portion))
-            blinkend = (self.endx*endpart+self.startx*(1-endpart), self.endy*endpart+self.starty*(1-endpart))
-            pygame.draw.line(surface, (255, 255, 255), blinkstart, blinkend, width=LINEWIDTH) 
+            drawnumber = math.floor(Game.deltatime/5e+8)%min(length, 8)
+            if drawnumber == index%8:
+                portion = Game.deltatime/5e+8%1
+                blinkpos = (self.endx*portion+self.startx*(1-portion), self.endy*portion+self.starty*(1-portion))
+                pygame.draw.circle(surface, (255, 255, 255), blinkpos, LINEWIDTH) 
+
             
 
 class App:
