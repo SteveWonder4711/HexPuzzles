@@ -99,7 +99,63 @@ def check_bookkeeper_gambit(directions, currentstack, gameobj):
         bookkeepindex += 1
     return True
 
-def iotatostring(iota):
+def renderpattern(surface, startx, starty, patternstring, maxwidth, maxheight):
+    verticaldistance = round(math.sqrt(100*100+50*50)) 
+    currentx = 0
+    currenty = 0
+    xpos = [0]
+    ypos = [0]
+    numbers = patternstring.replace("<", "").replace(">", "")
+    for number in numbers:
+        match number:
+            case "0":
+                currentx += 100
+            case "1":
+                currentx += 50
+                currenty += verticaldistance
+            case "2":
+                currentx -= 50
+                currenty += verticaldistance
+            case "3":
+                currentx -= 100
+            case "4":
+                currentx -= 50
+                currenty -= verticaldistance
+            case "5":
+                currentx += 50
+                currenty -= verticaldistance
+        xpos.append(currentx)
+        ypos.append(currenty)
+    patternwidth = max(*xpos) - min(*xpos)
+    patternheight = max(*ypos) - min(*ypos)
+    xof = -1*min(*xpos)
+    yof = -1*min(*ypos)
+    if patternheight == 0:
+        yof = maxheight/2
+    widthscale = heightscale = 1
+    if patternwidth > maxwidth:
+        widthscale = maxwidth/patternwidth
+    if patternheight > maxheight:
+        heightscale = maxheight/patternheight
+    scale = min(widthscale, heightscale)
+    if patternheight*scale < maxheight:
+        yadjust = (maxheight-patternheight*scale)
+        print("adjusting height by", yadjust)
+        yof += (maxheight-patternheight*scale)/scale/2
+    elif patternwidth*scale < maxwidth:
+        print("adjusting width")
+        xof += (maxwidth-patternwidth*scale)/scale/2
+    for i in range(len(xpos)-1):
+        pygame.draw.line(surface, LINEDRAWCOLOR, (startx+(xof+xpos[i])*scale, starty+(yof+ypos[i])*scale), (startx+(xof+xpos[i+1])*scale, starty+(yof+ypos[i+1])*scale), width=2)
+
+                
+
+
+
+def iotatostring(iota, stacksurface, row, column):
+    testtext = Game.font.render(" ", False, (0, 0, 0))
+    testrect = testtext.get_rect()
+    letterwidth, letterheight = testrect.width, testrect.height
     if type(iota) in [int,float]:
         return "{:.2f}".format(iota)
     elif type(iota) == bool:
@@ -108,16 +164,29 @@ def iotatostring(iota):
         return "({:.2f}, {:.2f}, {:.2f})".format(*iota)
     elif type(iota) == list:
         string = "["
+        drawcolumn = column + 1
         for i in range(len(iota)):
-            string += iotatostring(iota[i])
+            appendstring = iotatostring(iota[i], stacksurface, row, drawcolumn)
+            drawcolumn += len(appendstring)
+            string += appendstring
             if i != len(iota)-1:
-                string += ", "
+                if type(iota[i+1]) != str:
+                    string += ", "
+                    drawcolumn += 2
+                else:
+                    string += ","
+                    drawcolumn += 1
         string += "]"
         return string
     elif type(iota) == str:
         #strings are used for patterns and other internal types
         if iota == "ERROR":
             return "".join(random.choices("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!§$%&/()=?\\ß*+-#'_.:,;", k=20))
+        if iota.startswith("<"):
+            patternx = column*letterwidth
+            patterny = (row-1)*letterheight+0.1*letterheight
+            renderpattern(stacksurface, patternx, patterny, iota, letterwidth*1.8, letterheight*0.8)
+            return "  "
         return iota
     elif iota is None:
         return "Null"
@@ -130,7 +199,7 @@ def drawstack(currentstack, gamesurface, stacksurface):
     stacksurface.fill((0, 0, 0, 100))
     i = len(currentstack)-1
     while i >= 0 and i > len(currentstack)-20:
-        string = iotatostring(currentstack[i])
+        string = iotatostring(currentstack[i], stacksurface, len(currentstack)-i, 0)
         color = LINEDRAWCOLOR
         if currentstack[i] == "ERROR":
             color = LINEERRORCOLOR
@@ -327,7 +396,7 @@ class Point:
     def draw(self, surface):
         mousex, mousey = pygame.mouse.get_pos()
         distance = math.sqrt((self.xpos - mousex)**2 + (self.ypos - mousey)**2)
-        circlesize = math.floor(7-distance/40)
+        circlesize = math.floor(7-distance/60)
         if circlesize > 0:
             pygame.draw.circle(surface, CIRCLECOLOR, [self.xpos, self.ypos], circlesize)
 
@@ -384,12 +453,12 @@ class Connection:
         else:
             color = (150, 150, 150)
         if Game.directionrender:
-            color = tuple([value*(1-index/(length-1))+(255*0.75+value*0.25)*(index/(length-1)) for value in color])
+            color = tuple([value*(1-index/length)+(255*0.75+value*0.25)*(index/length) for value in color])
         pygame.draw.line(surface, color, self.startpos, self.endpos, width=LINEWIDTH) 
         if Game.directionrender:
-            drawnumber = math.floor(Game.deltatime/5e+8)%min(length, 8)
+            drawnumber = math.floor(Game.time/5e+8)%min(length, 8)
             if drawnumber == index%8:
-                portion = Game.deltatime/5e+8%1
+                portion = Game.time/5e+8%1
                 blinkpos = (self.endx*portion+self.startx*(1-portion), self.endy*portion+self.starty*(1-portion))
                 pygame.draw.circle(surface, (255, 255, 255), blinkpos, LINEWIDTH) 
 
@@ -409,7 +478,7 @@ class App:
         self.size = self.width, self.height = self._display_surf.get_size()
         self._running = True
         self.stacksurf = pygame.Surface((self.width*0.2, self.height-64), pygame.SRCALPHA)
-        self.font = pygame.font.Font('font.ttf', 32)
+        self.font = pygame.font.Font('font.ttf', 40)
         self.state = "Idle"
         self.pointdistance = self.height//16
         self.points: list[Point]  = generatepoints()
@@ -421,7 +490,7 @@ class App:
             self.spells = json.load(f)
         checkspells(self.spells)
         self.starttime = time.time_ns()
-        self.deltatime = 0
+        self.time = 0
         self.currentstack = []
         self.spellerror = False
         self.directionrender = False
@@ -483,7 +552,7 @@ class App:
 
             
     def on_loop(self):
-        self.deltatime = time.time_ns() - self.starttime
+        self.time = time.time_ns() - self.starttime
     def on_render(self):
         self._display_surf.fill((0, 0, 0))
         mousex, mousey = pygame.mouse.get_pos()
