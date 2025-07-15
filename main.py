@@ -92,7 +92,6 @@ def check_bookkeeper_gambit(directions, currentstack, gameobj):
     stackindex = -1
     for _ in range(len(bookkeeper)):
         if bookkeeper[bookkeepindex] == 0:
-            print(f"deleting {stackindex}")
             del currentstack[stackindex]
         else:
             stackindex -= 1
@@ -139,11 +138,8 @@ def renderpattern(surface, startx, starty, patternstring, maxwidth, maxheight):
         heightscale = maxheight/patternheight
     scale = min(widthscale, heightscale)
     if patternheight*scale < maxheight:
-        yadjust = (maxheight-patternheight*scale)
-        print("adjusting height by", yadjust)
         yof += (maxheight-patternheight*scale)/scale/2
     elif patternwidth*scale < maxwidth:
-        print("adjusting width")
         xof += (maxwidth-patternwidth*scale)/scale/2
     for i in range(len(xpos)-1):
         pygame.draw.line(surface, LINEDRAWCOLOR, (startx+(xof+xpos[i])*scale, starty+(yof+ypos[i])*scale), (startx+(xof+xpos[i+1])*scale, starty+(yof+ypos[i+1])*scale), width=2)
@@ -228,14 +224,22 @@ def newspell(currentspells, spelldirections, offset):
     with open(f'spells.py', 'a') as f:
         f.write(f'#{spellname}\n#{description}\ndef {id}(currentstack, gameobj):\n    pass\n\n\n')
 
-def setconnectionsstate(state, gameobj):
+def setconnectionsstate(state, gameobj, staffcast):
+    if not staffcast:
+        print("not cast by staff, skipping")
+        if len(gameobj.castspells[-1]) == 0:
+            print("nothing to set anyway")
+        return
     if len(gameobj.castspells) > 0:
+        print("jup, that one works alright")
+        if len(gameobj.castspells[-1]) == 0:
+            print("nothing to set though")
         for connection in gameobj.castspells[-1]:
             if connection.state == "Drawing":
                 connection.state = state
 
 
-def executespell(currentspell, currentstack, gameobj):
+def executespell(currentspell, currentstack, gameobj, staffcast=True):
     gameobj.castspells.append(gameobj.currentconnections)
     gameobj.currentconnections = []
     gameobj.spellerror = False
@@ -247,7 +251,7 @@ def executespell(currentspell, currentstack, gameobj):
         else:
             currentstack.append(f"<{"".join([str(direction) for direction in currentspell])}>")
         gameobj.consideration = False
-        setconnectionsstate("Considered", gameobj)
+        setconnectionsstate("Considered", gameobj, staffcast)
         return
     tocast = None 
     for spell in gameobj.spells:
@@ -256,44 +260,44 @@ def executespell(currentspell, currentstack, gameobj):
     #Certain spells which need Game Object
     if tocast == "consideration":
         gameobj.consideration = True
-        setconnectionsstate("Cast", gameobj)
+        setconnectionsstate("Cast", gameobj, staffcast)
         return
     elif tocast == "evanition":
         if len(gameobj.introspectionlist) > 0:
             gameobj.introspectionlist.pop()
-            setconnectionsstate("Considered", gameobj)
+            setconnectionsstate("Considered", gameobj, staffcast)
             return
     elif tocast == "introspection":
         if gameobj.introspectionlevel > 0:
             gameobj.introspectionlist.append(f"<{''.join([str(direction) for direction in currentspell])}>")
-            setconnectionsstate("Considered", gameobj)
+            setconnectionsstate("Considered", gameobj, staffcast)
         else:
-            setconnectionsstate("Cast", gameobj)
+            setconnectionsstate("Cast", gameobj, staffcast)
         gameobj.introspectionlevel += 1
         return
     elif tocast == "retrospection":
         gameobj.introspectionlevel -= 1
         if gameobj.introspectionlevel > 0:
             gameobj.introspectionlist.append(f"<{''.join([str(direction) for direction in currentspell])}>")
-            setconnectionsstate("Considered", gameobj) 
+            setconnectionsstate("Considered", gameobj, staffcast) 
         else:
             currentstack.append(gameobj.introspectionlist)
             gameobj.introspectionlist = []
-            setconnectionsstate("Cast", gameobj)
+            setconnectionsstate("Cast", gameobj, staffcast)
         return
     elif gameobj.introspectionlevel > 0:
         gameobj.introspectionlist.append(f"<{''.join([str(direction) for direction in currentspell])}>")
-        setconnectionsstate("Considered", gameobj)
+        setconnectionsstate("Considered", gameobj, staffcast)
         return
     elif tocast is not None: 
         spellfunction = getattr(spells, tocast)
         spellfunction(currentstack, gameobj)
     else:
         if check_numerical_reflection(normalspell, currentstack):
-            setconnectionsstate("Cast", gameobj)
+            setconnectionsstate("Cast", gameobj, staffcast)
             return
         if check_bookkeeper_gambit(normalspell, currentstack, gameobj):
-            setconnectionsstate("Cast", gameobj)
+            setconnectionsstate("Cast", gameobj, staffcast)
             return
 
     if tocast is None or gameobj.spellerror:
@@ -302,9 +306,9 @@ def executespell(currentspell, currentstack, gameobj):
             gameobj.currentconnections = []
         else:
             print("there was an error or it was a wrong spell :<")
-            setconnectionsstate("Error", gameobj)
+            setconnectionsstate("Error", gameobj, staffcast)
     else:
-        setconnectionsstate("Cast", gameobj)
+        setconnectionsstate("Cast", gameobj, staffcast)
 
         
 

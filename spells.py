@@ -965,14 +965,14 @@ def hermes_gambit(currentstack, gameobj):
     patterns = currentstack.pop()
     if type(patterns) == str:
        spell = elementtospell(patterns)
-       main.executespell(spell, currentstack, gameobj)
+       main.executespell(spell, currentstack, gameobj, staffcast=False)
     elif type(patterns) == list:
         for pattern in patterns:
             if type(pattern) == str:
                 if gameobj.executiondepth < currentdepth:
                     return
                 spell = elementtospell(pattern)
-                main.executespell(spell, currentstack, gameobj)
+                main.executespell(spell, currentstack, gameobj, staffcast=False)
     gameobj.executiondepth -= 1
 
 
@@ -1003,7 +1003,7 @@ def thots_gambit(currentstack, gameobj):
                 skip = True
                 break
             spell = elementtospell(pattern)
-        main.executespell(spell, tempstack, gameobj)
+            main.executespell(spell, tempstack, gameobj, staffcast=False)
         if not skip:
             for element in tempstack:
                 output.append(element)
