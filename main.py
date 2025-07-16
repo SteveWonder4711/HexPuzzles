@@ -145,8 +145,9 @@ def renderpattern(surface, startx, starty, patternstring, maxwidth, maxheight):
     elif patternwidth*scale < maxwidth:
         print("adjusting width")
         xof += (maxwidth-patternwidth*scale)/scale/2
+    linewidth = 2 if scale > 0.5 else 1
     for i in range(len(xpos)-1):
-        pygame.draw.line(surface, LINEDRAWCOLOR, (startx+(xof+xpos[i])*scale, starty+(yof+ypos[i])*scale), (startx+(xof+xpos[i+1])*scale, starty+(yof+ypos[i+1])*scale), width=2)
+        pygame.draw.line(surface, LINEDRAWCOLOR, (startx+(xof+xpos[i])*scale, starty+(yof+ypos[i])*scale), (startx+(xof+xpos[i+1])*scale, starty+(yof+ypos[i+1])*scale), width=linewidth)
 
                 
 
