@@ -2,9 +2,7 @@ import math
 import numpy as np
 import copy
 import main
-import time
 
-#TODO: Add more safety and mishap detection
 
 
 #True Reflection
@@ -111,7 +109,7 @@ def additive_distillation(currentstack, gameobj):
         currentstack.append(b)
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
 	
 
 #Subtractive Distillation
@@ -129,7 +127,7 @@ def subtractive_distillation(currentstack, gameobj):
         currentstack.append(tuple([b[i]-a[i] for i in range(3)]))
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
 
 
 #Multiplicative Distillation
@@ -150,7 +148,7 @@ def multiplicative_distillation(currentstack, gameobj):
         currentstack.append(sum([a[i]*b[i] for i in range(3)]))
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
 
 #Division Distillation
 #Perform division or the cross product.
@@ -159,6 +157,10 @@ def division_distillation(currentstack, gameobj):
     atype = type(a)
     b = currentstack.pop()
     btype = type(b)
+    if a == 0:
+        print("division by zero!")
+        gameobj.spellerror = True
+        return
     if atype in [int, float] and btype in [int,float]:
         currentstack.append(b/a)
     elif atype in [int,float] and btype == tuple:
@@ -171,7 +173,7 @@ def division_distillation(currentstack, gameobj):
         currentstack.append((s1, s2, s3))
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
 
 
 
@@ -191,7 +193,7 @@ def length_purification(currentstack, gameobj):
         currentstack.append(len(num))
     else:
         print(f"spell not able to handle type {numtype}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
 
 #Power Distillation
 #Perform exponentiation or vector projection.
@@ -211,7 +213,7 @@ def power_distillation(currentstack, gameobj):
         currentstack.append(tuple((np.dot(u, v)/v_norm**2)*v))
     else:
         print(f"spell not able to handle types {atype} and {btype}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
 
 
 
@@ -226,7 +228,7 @@ def floor_purification(currentstack, gameobj):
         currentstack.append(tuple([math.floor(element) for element in num]))
     else:
         print(f"spell not able to handle type {numtype}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
 
 #Ceiling Purification
 #"Ceilings" a number, raising it to the next integer value if it has a fractional componen. If passed a vector, instead ceils each of its components.
@@ -239,7 +241,7 @@ def ceiling_purification(currentstack, gameobj):
         currentstack.append(tuple([math.ceil(element) for element in num]))
     else:
         print(f"spell not able to handle type {numtype}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
 
 
 #Vector Exaltation
@@ -248,16 +250,25 @@ def vector_exaltation(currentstack, gameobj):
     z = currentstack.pop()
     y = currentstack.pop()
     x = currentstack.pop()
+    for element in [x,y,z]:
+        if type(element) not in [int,float]:
+            print("needs three numbers!")
+            gameobj.spellerror = True
+            return
     currentstack.append((x, y, z))
 
 
 #Vector Disintegration
 #Split a vector into its X, Y, and Z components (bottom to top).
 def vector_disintegration(currentstack, gameobj):
-	x, y, z = currentstack.pop()
-	currentstack.append(x)
-	currentstack.append(y)
-	currentstack.append(z)
+    vector = currentstack.pop()
+    if type(vector) != tuple:
+        print("needs a vector!")
+        gameobj.spellerror = True
+    x, y, z = currentstack.pop()
+    currentstack.append(x)
+    currentstack.append(y)
+    currentstack.append(z)
 
 
 #Modulus Distillation
@@ -292,7 +303,7 @@ def axial_purification(currentstack, gameobj):
         currentstack.append(tuple([element/length for element in num]))
     else:
         print(f"spell not able to handle type {numtype}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
 
 
 #Entropy Reflection
@@ -359,7 +370,7 @@ def gemini_gambit(currentstack, gameobj):
     item = currentstack.pop()
     if type(num) != int:
         print("this spell needs a number at the top of the stack")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     for _ in range(num):
         currentstack.append(copy.deepcopy(item))
@@ -384,9 +395,13 @@ def fishermans_gambit(currentstack, gameobj):
     num = currentstack.pop()
     if type(num) != int:
         print("this spell needs a number at the top of the stack")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     if num >= 0:
+        if len(currentstack) <= num:
+            print("index out of bounds!")
+            gameobj.spellerror = True
+            return
         item = copy.deepcopy(currentstack[-num-1])
         del currentstack[-num-1]
         currentstack.append(item)
@@ -401,9 +416,13 @@ def fishermans_gambit_ii(currentstack, gameobj):
     num = currentstack.pop()
     if type(num) != int:
         print("this spell needs a number at the top of the stack")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     if num >= 0:
+        if len(currentstack) <= num:
+            print("index out of bounds!")
+            gameobj.spellerror = True
+            return
         item = currentstack[-num-1]
         currentstack.append(copy.deepcopy(item))
     else:
@@ -417,7 +436,7 @@ def swindlers_gambit(currentstack, gameobj):
     code = currentstack.pop()
     if type(code) != int:
         print("lehmer code needs to be an integer")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     #factorials up to 720
     factorials = [1, 2, 6, 24, 120, 720]
@@ -426,7 +445,7 @@ def swindlers_gambit(currentstack, gameobj):
         i += 1
     if i > len(currentstack):
         print("not enough iotas on stack for lehmer code")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     choices = [currentstack.pop() for _ in range(i+1)]
     print(f"i: {i}")
@@ -469,7 +488,7 @@ def negation_purification(currentstack, gameobj):
         currentstack.append(argument*-1-1)
     else:
         print("argument needs to be bool!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     
 
@@ -494,7 +513,7 @@ def disjunction_distillation(currentstack, gameobj):
         currentstack.append(outlist)
     else:
         print(f"spell cannot handle types {type(a)} and {type(b)}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     
 
@@ -518,7 +537,7 @@ def conjunction_distillation(currentstack, gameobj):
         currentstack.append(outlist)
     else:
         print(f"spell cannot handle types {type(a)} and {type(b)}!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
 
 
@@ -545,8 +564,8 @@ def exclusion_distillation(currentstack, gameobj):
         currentstack.append(outlist)
 
     else:
-        print("both arguments need to be booleans")
-        currentstack.append("ERROR")
+        print(f"spell cannot handle types {type(a)} and {type(b)}!")
+        gameobj.spellerror = True
         return
 
 
@@ -556,7 +575,7 @@ def augurs_exaltation(currentstack, gameobj):
     sel = currentstack.pop()
     if type(sel) != bool:
         print("needs a boolean value as selector")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     if sel:
         del currentstack[-2]
@@ -588,7 +607,7 @@ def maximus_distillation(currentstack, gameobj):
     b = currentstack.pop()
     if type(a) not in [int,float] or type(b) not in [int,float]:
         print("needs two numbers")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     else:
         currentstack.append(b>a)
@@ -601,7 +620,7 @@ def minimus_distillation(currentstack, gameobj):
     b = currentstack.pop()
     if type(a) not in [int,float] or type(b) not in [int,float]:
         print("needs two numbers")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     else:
         currentstack.append(b<a)
@@ -614,7 +633,7 @@ def maximus_distillation_ii(currentstack, gameobj):
     b = currentstack.pop()
     if type(a) not in [int,float] or type(b) not in [int,float]:
         print("needs two numbers")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     else:
         currentstack.append(b>=a)
@@ -627,7 +646,7 @@ def minimus_distillation_ii(currentstack, gameobj):
     b = currentstack.pop()
     if type(a) not in [int,float] or type(b) not in [int,float]:
         print("needs two numbers")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     else:
         currentstack.append(b<=a)
@@ -639,12 +658,12 @@ def selection_distillation(currentstack, gameobj):
     num = currentstack.pop()
     if type(num) != int:
         print("needs an integer")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     container = currentstack.pop()
     if type(container) != list:
         print("expected a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack.append(container[num])
 
@@ -657,7 +676,7 @@ def selection_exaltation(currentstack, gameobj):
     container = currentstack.pop()
     if type(num1) != int or type(num2) != int:
         print("needs two integers and a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     if num1 > num2:
         num1, num2 = num2, num1
@@ -671,7 +690,7 @@ def integration_distillation(currentstack, gameobj):
     container = currentstack[-1]
     if type(container) != list:
         print("needs a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     container.append(element)
 
@@ -682,7 +701,7 @@ def derivation_decomposition(currentstack, gameobj):
     container = currentstack.pop()
     if type(container) != list:
         print("needs a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack.append(container.pop())
 
@@ -706,7 +725,7 @@ def retrograde_purification(currentstack, gameobj):
     container = currentstack.pop()
     if type(container) != list:
         print("need a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack.append(container.reverse())
 
@@ -718,7 +737,7 @@ def locators_distillation(currentstack, gameobj):
     container = currentstack.pop()
     if type(container) != list:
         print("needs a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     if element not in container:
         currentstack.append(-1)
@@ -733,7 +752,7 @@ def excisors_distillation(currentstack, gameobj):
     container = currentstack.pop()
     if type(num) != int or type(container) != list:
         print("needs an integer and a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     del container[num]
 
@@ -745,7 +764,7 @@ def surgeons_exaltation(currentstack, gameobj):
     index = currentstack.pop()
     if type(index) != int or type(currentstack[-1]) != list: 
         print("needs an integer, an element and a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack[-1][index] = element
 
@@ -756,7 +775,7 @@ def flocks_gambit(currentstack, gameobj):
     num = currentstack.pop()
     if type(num) != int:
         print("needs an integer")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     outlist = []
     for _ in range(num):
@@ -771,7 +790,7 @@ def flocks_disintegration(currentstack, gameobj):
     container = currentstack.pop()
     if type(container) != list:
         print("needs a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     for element in container:
         currentstack.append(element)
@@ -783,7 +802,7 @@ def speakers_distillation(currentstack, gameobj):
     element = currentstack.pop()
     if type(currentstack[-1]) != list:
         print("needs a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack[-1].insert(0, element)
 
@@ -793,7 +812,7 @@ def speakers_distillation(currentstack, gameobj):
 def speakers_decomposition(currentstack, gameobj):
     if type(currentstack[-1]) != list:
         print("needs a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     element = currentstack[-1]
     del currentstack[-1]
@@ -805,7 +824,7 @@ def speakers_decomposition(currentstack, gameobj):
 def scribes_reflection(currentstack, gameobj):
     if len(gameobj.levelinputs) == 0:
         print("Level inputs empty!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack.append(gameobj.levelinputs[0])
     del gameobj.levelinputs[0]
@@ -837,7 +856,7 @@ def sine_purification(currentstack, gameobj):
     angle = currentstack.pop()
     if type(angle) not in [int,float]:
         print("needs a number!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack.append(math.floor(math.sin(angle)*1e+10)/1e+10)
 
@@ -848,18 +867,18 @@ def cosine_purification(currentstack, gameobj):
     angle = currentstack.pop()
     if type(angle) not in [int,float]:
         print("needs a number!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack.append(math.floor(math.cos(angle)*1e+10)/1e+10)
 
 
-#Tanent Purification
+#Tangent Purification
 #Takes the tangent of an angle in radians.
-def tanent_purification(currentstack, gameobj):
+def tangent_purification(currentstack, gameobj):
     angle = currentstack.pop()
     if type(angle) not in [int,float]:
         print("needs a number!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack.append(math.floor(math.tan(angle)*1e+10)/1e+10)
 
@@ -870,11 +889,11 @@ def inverse_sine_purification(currentstack, gameobj):
     value = currentstack.pop()
     if type(value) not in [int,float]:
         print("needs a number!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     if value > 1 or value < -1:
         print("needs a value between -1 and 1!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
     currentstack.append(math.floor(math.asin(value)*1e+10)/1e+10)
 
 
@@ -884,11 +903,11 @@ def inverse_cosine_purification(currentstack, gameobj):
     value = currentstack.pop()
     if type(value) not in [int,float]:
         print("needs a number!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     if value > 1 or value < -1:
         print("needs a value between -1 and 1!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
     currentstack.append(math.floor(math.acos(value)*1e+10)/1e+10)
 
 
@@ -898,7 +917,7 @@ def inverse_tangent_purification(currentstack, gameobj):
     value = currentstack.pop()
     if type(value) not in [int,float]:
         print("needs a number!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack.append(math.floor(math.atan(value)*1e+10)/1e+10)
 
@@ -910,7 +929,7 @@ def inverse_tangent_distillation(currentstack, gameobj):
     x = currentstack.pop()
     if type(x) not in [int,float] or type(y) not in [int, float]:
         print("needs two numbers!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     value = y/x
     currentstack.append(math.floor(math.atan(value)*1e+10)/1e+10)
@@ -923,7 +942,7 @@ def logarithmic_distillation(currentstack, gameobj):
     x = currentstack.pop()
     if type(x) not in [int,float] or type(base) not in [int, float]:
         print("needs two numbers!")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     currentstack.append(math.floor(math.log(x, base)*1e+10)/1e+10)
 
@@ -934,7 +953,7 @@ def uniqueness_purification(currentstack, gameobj):
     container = currentstack.pop()
     if type(container) != list:
         print("needs a list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     newlist = []
     for element in container:
@@ -943,6 +962,7 @@ def uniqueness_purification(currentstack, gameobj):
     currentstack.append(newlist)
 
 
+#Helper Function for Meta-Eval
 def elementtospell(element):
     if type(element) != str:
         return None
@@ -989,7 +1009,7 @@ def thots_gambit(currentstack, gameobj):
     patterns = currentstack.pop()
     if type(patterns) != list or type(container) != list:
         print("needs a list of patterns and another list")
-        currentstack.append("ERROR")
+        gameobj.spellerror = True
         return
     output = []
     for element in container:

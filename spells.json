@@ -1055,8 +1055,8 @@
         "description": "Takes the cosine of an angle in radians.",
         "argnum": 1
     },
-    "tanent_purification": {
-        "name": "Tanent Purification",
+    "tangent_purification": {
+        "name": "Tangent Purification",
         "directions": [
             0,
             0,
@@ -1141,7 +1141,7 @@
         ],
         "offset": 3,
         "description": "Takes the inverse tangent of a Y and X value",
-        "argnum": 1
+        "argnum": 2
     },
     "logarithmic_distillation": {
         "name": "Logarithmic Distillation",
