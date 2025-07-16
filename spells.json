@@ -9,7 +9,8 @@
             2
         ],
         "offset": 1,
-        "description": "Adds True to the top of the stack"
+        "description": "Adds True to the top of the stack",
+        "argnum": 0
     },
     "false_reflection": {
         "name": "False Reflection",
@@ -21,7 +22,8 @@
             4
         ],
         "offset": 5,
-        "description": "Adds False to the top of the stack"
+        "description": "Adds False to the top of the stack",
+        "argnum": 0
     },
     "nullary_reflection": {
         "name": "Nullary Reflection",
@@ -30,7 +32,8 @@
             2
         ],
         "offset": 0,
-        "description": "Adds Null to the top of the stack"
+        "description": "Adds Null to the top of the stack",
+        "argnum": 0
     },
     "vector_reflection_zero": {
         "name": "Vector Reflection Zero",
@@ -43,7 +46,8 @@
             1
         ],
         "offset": 4,
-        "description": "Adds (0, 0, 0) to the top of the stack"
+        "description": "Adds (0, 0, 0) to the top of the stack",
+        "argnum": 0
     },
     "vector_reflection_px": {
         "name": "Vector Reflection +X",
@@ -58,7 +62,8 @@
             0
         ],
         "offset": 4,
-        "description": "Adds (1, 0, 0) to the top of the stack"
+        "description": "Adds (1, 0, 0) to the top of the stack",
+        "argnum": 0
     },
     "vector_reflection_nx": {
         "name": "Vector Reflection -X",
@@ -73,7 +78,8 @@
             2
         ],
         "offset": 5,
-        "description": "Adds (-1, 0, 0) to the top of the stack"
+        "description": "Adds (-1, 0, 0) to the top of the stack",
+        "argnum": 0
     },
     "vector_reflection_py": {
         "name": "Vector Reflection +Y",
@@ -88,7 +94,8 @@
             2
         ],
         "offset": 4,
-        "description": "Adds (0, 1, 0) to the top of the stack"
+        "description": "Adds (0, 1, 0) to the top of the stack",
+        "argnum": 0
     },
     "vector_reflection_ny": {
         "name": "Vector Reflection -Y",
@@ -103,7 +110,8 @@
             4
         ],
         "offset": 5,
-        "description": "Adds (0, -1, 0) to the top of the stack"
+        "description": "Adds (0, -1, 0) to the top of the stack",
+        "argnum": 0
     },
     "vector_reflection_pz": {
         "name": "Vector Reflection +Z",
@@ -118,7 +126,8 @@
             4
         ],
         "offset": 4,
-        "description": "Adds (0, 0, 1) to the top of the stack"
+        "description": "Adds (0, 0, 1) to the top of the stack",
+        "argnum": 0
     },
     "vector_reflection_nz": {
         "name": "Vector Reflection -Z",
@@ -133,7 +142,8 @@
             0
         ],
         "offset": 5,
-        "description": "Adds (0, 0, -1) to the top of the stack"
+        "description": "Adds (0, 0, -1) to the top of the stack",
+        "argnum": 0
     },
     "circle_reflection": {
         "name": "Circle's Reflection",
@@ -146,7 +156,8 @@
             4
         ],
         "offset": 4,
-        "description": "Adds \u03c4, the radial representation of a complete circle, to the stack."
+        "description": "Adds \u03c4, the radial representation of a complete circle, to the stack.",
+        "argnum": 0
     },
     "arc_reflection": {
         "name": "Arc's Reflection",
@@ -159,7 +170,8 @@
             2
         ],
         "offset": 5,
-        "description": "Adds \u03c0, the radial representation of half a circle, to the stack."
+        "description": "Adds \u03c0, the radial representation of half a circle, to the stack.",
+        "argnum": 0
     },
     "euler_reflection": {
         "name": "Euler's Reflection",
@@ -170,7 +182,8 @@
             1
         ],
         "offset": 0,
-        "description": "Adds e, the base of natural logarithms, to the stack."
+        "description": "Adds e, the base of natural logarithms, to the stack.",
+        "argnum": 0
     },
     "additive_distillation": {
         "name": "Additive Distillation",
@@ -182,7 +195,8 @@
             2
         ],
         "offset": 5,
-        "description": "Performs Addition"
+        "description": "Performs Addition",
+        "argnum": 2
     },
     "subtractive_distillation": {
         "name": "Subtractive Distillation",
@@ -194,7 +208,8 @@
             4
         ],
         "offset": 4,
-        "description": "Performs Subtraction"
+        "description": "Performs Subtraction",
+        "argnum": 2
     },
     "multiplicative_distillation": {
         "name": "Multiplicative Distillation",
@@ -207,7 +222,8 @@
             1
         ],
         "offset": 1,
-        "description": "Perform multiplication or the dot product."
+        "description": "Perform multiplication or the dot product.",
+        "argnum": 2
     },
     "division_distillation": {
         "name": "Division Distillation",
@@ -220,7 +236,8 @@
             5
         ],
         "offset": 5,
-        "description": "Perform division or the cross product."
+        "description": "Perform division or the cross product.",
+        "argnum": 2
     },
     "length_purification": {
         "name": "Length Purification",
@@ -233,7 +250,8 @@
             2
         ],
         "offset": 5,
-        "description": "Compute the absolute value or length."
+        "description": "Compute the absolute value or length.",
+        "argnum": 1
     },
     "power_distillation": {
         "name": "Power Distillation",
@@ -246,7 +264,8 @@
             4
         ],
         "offset": 4,
-        "description": "Perform exponentiation or vector projection."
+        "description": "Perform exponentiation or vector projection.",
+        "argnum": 2
     },
     "floor_purification": {
         "name": "Floor Purification",
@@ -257,7 +276,8 @@
             0
         ],
         "offset": 0,
-        "description": "\"Floors\" a number, cutting off the fractional component and leaving an integer value. If passed a vector, instead floors each of its components."
+        "description": "\"Floors\" a number, cutting off the fractional component and leaving an integer value. If passed a vector, instead floors each of its components.",
+        "argnum": 1
     },
     "ceiling_purification": {
         "name": "Ceiling Purification",
@@ -268,7 +288,8 @@
             0
         ],
         "offset": 0,
-        "description": "\"Ceilings\" a number, raising it to the next integer value if it has a fractional componen. If passed a vector, instead ceils each of its components."
+        "description": "\"Ceilings\" a number, raising it to the next integer value if it has a fractional componen. If passed a vector, instead ceils each of its components.",
+        "argnum": 1
     },
     "vector_exaltation": {
         "name": "Vector Exaltation",
@@ -282,7 +303,8 @@
             2
         ],
         "offset": 0,
-        "description": "Combine three numbers into a vector"
+        "description": "Combine three numbers into a vector",
+        "argnum": 3
     },
     "vector_disintegration": {
         "name": "Vector Disintegration",
@@ -296,7 +318,8 @@
             4
         ],
         "offset": 0,
-        "description": "Split a vector into its X, Y, and Z components (bottom to top)."
+        "description": "Split a vector into its X, Y, and Z components (bottom to top).",
+        "argnum": 1
     },
     "modulus_distillation": {
         "name": "Modulus Distillation",
@@ -311,7 +334,8 @@
             0
         ],
         "offset": 5,
-        "description": "Takes the modulus of two numbers"
+        "description": "Takes the modulus of two numbers",
+        "argnum": 2
     },
     "axial_purification": {
         "name": "Axial Purification",
@@ -327,7 +351,8 @@
             5
         ],
         "offset": 4,
-        "description": "Coerce vector to nearest axial direction or return sign of number"
+        "description": "Coerce vector to nearest axial direction or return sign of number",
+        "argnum": 1
     },
     "entropy_reflection": {
         "name": "Entropy Reflection",
@@ -339,7 +364,8 @@
             4
         ],
         "offset": 4,
-        "description": "Creates a random number between 0 and 1"
+        "description": "Creates a random number between 0 and 1",
+        "argnum": 0
     },
     "jesters_gambit": {
         "name": "Jester's Gambit",
@@ -352,7 +378,8 @@
             0
         ],
         "offset": 0,
-        "description": "Swaps the top two iotas on the stack"
+        "description": "Swaps the top two iotas on the stack",
+        "argnum": 2
     },
     "rotation_gambit": {
         "name": "Rotation Gambit",
@@ -365,7 +392,8 @@
             5
         ],
         "offset": 0,
-        "description": "Yanks the iota third from the top of the stack to the top"
+        "description": "Yanks the iota third from the top of the stack to the top",
+        "argnum": 3
     },
     "rotation_gambit_ii": {
         "name": "Rotation Gambit II",
@@ -378,7 +406,8 @@
             1
         ],
         "offset": 5,
-        "description": "Yanks the top iota to the third position"
+        "description": "Yanks the top iota to the third position",
+        "argnum": 3
     },
     "gemini_decomposition": {
         "name": "Gemini Decomposition",
@@ -391,7 +420,8 @@
             0
         ],
         "offset": 0,
-        "description": "Duplicates the top iota"
+        "description": "Duplicates the top iota",
+        "argnum": 1
     },
     "prospectors_gambit": {
         "name": "Prospector's Gambit",
@@ -404,7 +434,8 @@
             1
         ],
         "offset": 0,
-        "description": "Copy the second-to-last iota to the top"
+        "description": "Copy the second-to-last iota to the top",
+        "argnum": 2
     },
     "undertakers_gambit": {
         "name": "Undertaker's Gambit",
@@ -417,7 +448,8 @@
             5
         ],
         "offset": 0,
-        "description": "Copy the top iota of the stack, put it under the second"
+        "description": "Copy the top iota of the stack, put it under the second",
+        "argnum": 2
     },
     "gemini_gambit": {
         "name": "Gemini Gambit",
@@ -433,7 +465,8 @@
             4
         ],
         "offset": 0,
-        "description": "Removes the number at the top of the stack, copies the next iota that number of times"
+        "description": "Removes the number at the top of the stack, copies the next iota that number of times",
+        "argnum": 2
     },
     "dioscuri_gambit": {
         "name": "Dioscuri Gambit",
@@ -449,7 +482,8 @@
             0
         ],
         "offset": 0,
-        "description": "Copy the top two iotas of the stack"
+        "description": "Copy the top two iotas of the stack",
+        "argnum": 2
     },
     "flocks_reflection": {
         "name": "Flock's Reflection",
@@ -469,7 +503,8 @@
             1
         ],
         "offset": 4,
-        "description": "Pushes the size of the stack"
+        "description": "Pushes the size of the stack",
+        "argnum": 0
     },
     "fishermans_gambit": {
         "name": "Fisherman's Gambit",
@@ -481,7 +516,8 @@
             4
         ],
         "offset": 3,
-        "description": "Grabs the element in the stack indexed by the number and brings it to the top. If the number is negative, instead moves the top iota down that many elements"
+        "description": "Grabs the element in the stack indexed by the number and brings it to the top. If the number is negative, instead moves the top iota down that many elements",
+        "argnum": 1
     },
     "fishermans_gambit_ii": {
         "name": "Fisherman's Gambit II",
@@ -493,7 +529,8 @@
             2
         ],
         "offset": 0,
-        "description": "Like Fisherman's Gambit, but copies instead of moving"
+        "description": "Like Fisherman's Gambit, but copies instead of moving",
+        "argnum": 1
     },
     "swindlers_gambit": {
         "name": "Swindler's Gambit",
@@ -508,7 +545,8 @@
             0
         ],
         "offset": 1,
-        "description": "Rearranges the top elements based on the provided Lehmer Code"
+        "description": "Rearranges the top elements based on the provided Lehmer Code",
+        "argnum": 1
     },
     "augurs_purification": {
         "name": "Augur's Purification",
@@ -518,7 +556,8 @@
             4
         ],
         "offset": 5,
-        "description": "Convert an argument to a boolean: 0, None and False become False, everything else becomes True"
+        "description": "Convert an argument to a boolean: 0, None and False become False, everything else becomes True",
+        "argnum": 1
     },
     "negation_purification": {
         "name": "Negation Purification",
@@ -528,7 +567,8 @@
             2
         ],
         "offset": 4,
-        "description": "Inverts the boolean argument"
+        "description": "Inverts the boolean argument",
+        "argnum": 1
     },
     "disjunction_distillation": {
         "name": "Disjunction Distillation",
@@ -539,7 +579,8 @@
             4
         ],
         "offset": 1,
-        "description": "Performs boolean OR"
+        "description": "Performs boolean OR",
+        "argnum": 2
     },
     "conjunction_distillation": {
         "name": "Conjunction Distillation",
@@ -550,7 +591,8 @@
             2
         ],
         "offset": 5,
-        "description": "Performs boolean AND"
+        "description": "Performs boolean AND",
+        "argnum": 2
     },
     "exclusion_distillation": {
         "name": "Exclusion Distillation",
@@ -561,7 +603,8 @@
             0
         ],
         "offset": 4,
-        "description": "Performs boolean XOR"
+        "description": "Performs boolean XOR",
+        "argnum": 2
     },
     "augurs_exaltation": {
         "name": "Augur's Exaltation",
@@ -573,7 +616,8 @@
             2
         ],
         "offset": 1,
-        "description": "If the first argument is True, keep the second and discard the third. Otherwise vice versa"
+        "description": "If the first argument is True, keep the second and discard the third. Otherwise vice versa",
+        "argnum": 3
     },
     "equality_distillation": {
         "name": "Equality Distillation",
@@ -583,7 +627,8 @@
             0
         ],
         "offset": 0,
-        "description": "If the first two arguments are equal, return True, otherwise False"
+        "description": "If the first two arguments are equal, return True, otherwise False",
+        "argnum": 2
     },
     "inequality_distillation": {
         "name": "Inequality Distillation",
@@ -593,7 +638,8 @@
             0
         ],
         "offset": 0,
-        "description": "If the first two arguments are not equal, return True, otherwise False"
+        "description": "If the first two arguments are not equal, return True, otherwise False",
+        "argnum": 2
     },
     "maximus_distillation": {
         "name": "Maximus Distillation",
@@ -602,7 +648,8 @@
             1
         ],
         "offset": 1,
-        "description": "If the first argument is greater than the second, return True, otherwise False"
+        "description": "If the first argument is greater than the second, return True, otherwise False",
+        "argnum": 2
     },
     "minimus_distillation": {
         "name": "Minimus Distillation",
@@ -611,7 +658,8 @@
             5
         ],
         "offset": 2,
-        "description": "If the first argument is lesser than the second, return True, otherwise False"
+        "description": "If the first argument is lesser than the second, return True, otherwise False",
+        "argnum": 2
     },
     "maximus_distillation_ii": {
         "name": "Maximus Distillation II",
@@ -621,7 +669,8 @@
             2
         ],
         "offset": 1,
-        "description": "If the first argument is greater or equal to the second, return True, otherwise False"
+        "description": "If the first argument is greater or equal to the second, return True, otherwise False",
+        "argnum": 2
     },
     "minimus_distillation_ii": {
         "name": "Minimus Distillation II",
@@ -631,7 +680,8 @@
             4
         ],
         "offset": 2,
-        "description": "If the first argument is lenn or equal to the second, return True, otherwise False"
+        "description": "If the first argument is lenn or equal to the second, return True, otherwise False",
+        "argnum": 2
     },
     "selection_distillation": {
         "name": "Selection Distillation",
@@ -644,7 +694,8 @@
             1
         ],
         "offset": 4,
-        "description": "Remove the number at the top of the stack and get the element indexed by that number from the list on the top of the stack. Return None if out of bounds"
+        "description": "Remove the number at the top of the stack and get the element indexed by that number from the list on the top of the stack. Return None if out of bounds",
+        "argnum": 2
     },
     "selection_exaltation": {
         "name": "Selection Exaltation",
@@ -661,7 +712,8 @@
             0
         ],
         "offset": 4,
-        "description": "Remove the two numbers at the top of the stack, replace the list on top with a sublist between those indices, both inclusive"
+        "description": "Remove the two numbers at the top of the stack, replace the list on top with a sublist between those indices, both inclusive",
+        "argnum": 3
     },
     "integration_distillation": {
         "name": "Integration Distillation",
@@ -674,7 +726,8 @@
             5
         ],
         "offset": 2,
-        "description": "IRemove the element on top of the stack and add it to the list on top of the stack"
+        "description": "IRemove the element on top of the stack and add it to the list on top of the stack",
+        "argnum": 2
     },
     "derivation_decomposition": {
         "name": "Derivation Decomposition",
@@ -687,7 +740,8 @@
             1
         ],
         "offset": 4,
-        "description": "Remove the last element of the list at the top of the stack and add it to the top of the stack."
+        "description": "Remove the last element of the list at the top of the stack and add it to the top of the stack.",
+        "argnum": 1
     },
     "vacant_reflection": {
         "name": "Vacant Reflection",
@@ -702,7 +756,8 @@
             0
         ],
         "offset": 5,
-        "description": "Push an empty list to the top of the stack."
+        "description": "Push an empty list to the top of the stack.",
+        "argnum": 0
     },
     "singles_purification": {
         "name": "Single's Purification",
@@ -716,7 +771,8 @@
             5
         ],
         "offset": 0,
-        "description": "Remove the top of the stack and push a list containing only that element."
+        "description": "Remove the top of the stack and push a list containing only that element.",
+        "argnum": 1
     },
     "retrograde_purification": {
         "name": "Retrograde Purification",
@@ -731,7 +787,8 @@
             5
         ],
         "offset": 0,
-        "description": "Reverse the list at the top of the stack"
+        "description": "Reverse the list at the top of the stack",
+        "argnum": 1
     },
     "locators_distillation": {
         "name": "Locator's Distillation",
@@ -745,7 +802,8 @@
             1
         ],
         "offset": 0,
-        "description": "Remove the top element and list on the stack and push the index of that element in the list, -1 if it does not exist."
+        "description": "Remove the top element and list on the stack and push the index of that element in the list, -1 if it does not exist.",
+        "argnum": 2
     },
     "excisors_distillation": {
         "name": "Excisor's Distillation",
@@ -762,7 +820,8 @@
             0
         ],
         "offset": 2,
-        "description": "Remove the number at the top of the stack, then remove the element indexed by the number of the list on the top of the stack."
+        "description": "Remove the number at the top of the stack, then remove the element indexed by the number of the list on the top of the stack.",
+        "argnum": 2
     },
     "surgeons_exaltation": {
         "name": "Surgeon's Exaltation",
@@ -777,7 +836,8 @@
             1
         ],
         "offset": 4,
-        "description": "Remove the top element and a number from the stack, then set the nth element of the list on top of the stack with that element"
+        "description": "Remove the top element and a number from the stack, then set the nth element of the list on top of the stack with that element",
+        "argnum": 3
     },
     "flocks_gambit": {
         "name": "Flock's Gambit",
@@ -792,7 +852,8 @@
             5
         ],
         "offset": 2,
-        "description": "Remove a number and then that number many elements from the stack, push a list with all those elements."
+        "description": "Remove a number and then that number many elements from the stack, push a list with all those elements.",
+        "argnum": 1
     },
     "flocks_disintegration": {
         "name": "Flock's Disintegration",
@@ -807,7 +868,8 @@
             1
         ],
         "offset": 4,
-        "description": "Remove the list at the top of the stack and push each element of it to the stack"
+        "description": "Remove the list at the top of the stack and push each element of it to the stack",
+        "argnum": 1
     },
     "speakers_distillation": {
         "name": "Speaker's Distillation",
@@ -822,7 +884,8 @@
             4
         ],
         "offset": 1,
-        "description": "Remove the top element of the stack, add it as the first element to the list on top of the stack."
+        "description": "Remove the top element of the stack, add it as the first element to the list on top of the stack.",
+        "argnum": 2
     },
     "speakers_decomposition": {
         "name": "Speaker's Decomposition",
@@ -837,7 +900,8 @@
             2
         ],
         "offset": 2,
-        "description": "Remove the first element of the list at the top of the stack and push it to the stack."
+        "description": "Remove the first element of the list at the top of the stack and push it to the stack.",
+        "argnum": 1
     },
     "consideration": {
         "name": "Consideration",
@@ -850,7 +914,8 @@
             1
         ],
         "offset": 3,
-        "description": "Pushes the next pattern drawn onto the stack"
+        "description": "Pushes the next pattern drawn onto the stack",
+        "argnum": 0
     },
     "introspection": {
         "name": "Introspection",
@@ -861,7 +926,8 @@
             3
         ],
         "offset": 3,
-        "description": "Pushes the next patterns onto the stack, until i draw Retrospection"
+        "description": "Pushes the next patterns onto the stack, until i draw Retrospection",
+        "argnum": 0
     },
     "retrospection": {
         "name": "Retrospection",
@@ -872,7 +938,8 @@
             3
         ],
         "offset": 0,
-        "description": "Ends the effect of Introspection. If two Introspections were drawn, two Retrospections have to be drawn"
+        "description": "Ends the effect of Introspection. If two Introspections were drawn, two Retrospections have to be drawn",
+        "argnum": 0
     },
     "evanition": {
         "name": "Evanition",
@@ -885,7 +952,8 @@
             5
         ],
         "offset": 0,
-        "description": "Removes the last pattern that was drawn Inside Intro- and Retrospection"
+        "description": "Removes the last pattern that was drawn Inside Intro- and Retrospection",
+        "argnum": 0
     },
     "scribes_reflection": {
         "name": "Scribe's Reflection",
@@ -899,7 +967,8 @@
             5
         ],
         "offset": 0,
-        "description": "Pushes an iota from the level input onto the stack"
+        "description": "Pushes an iota from the level input onto the stack",
+        "argnum": 0
     },
     "scribes_gambit": {
         "name": "Scribe's Gambit",
@@ -913,7 +982,8 @@
             1
         ],
         "offset": 0,
-        "description": "Removes the top iota and outputs it"
+        "description": "Removes the top iota and outputs it",
+        "argnum": 1
     },
     "huginns_gambit": {
         "name": "Huginn's Gambit",
@@ -931,7 +1001,8 @@
             4
         ],
         "offset": 4,
-        "description": "Removes the top iota from the stack and saves it to my ravenmind."
+        "description": "Removes the top iota from the stack and saves it to my ravenmind.",
+        "argnum": 1
     },
     "munnins_reflection": {
         "name": "Munnin's Reflection",
@@ -949,7 +1020,8 @@
             2
         ],
         "offset": 5,
-        "description": "Copy the iota out of my ravenmind and push it onto the stack."
+        "description": "Copy the iota out of my ravenmind and push it onto the stack.",
+        "argnum": 0
     },
     "sine_purification": {
         "name": "Sine Purification",
@@ -964,7 +1036,8 @@
             3
         ],
         "offset": 1,
-        "description": "Takes the sine of an angle in radians."
+        "description": "Takes the sine of an angle in radians.",
+        "argnum": 1
     },
     "cosine_purification": {
         "name": "Cosine Purification",
@@ -979,7 +1052,8 @@
             1
         ],
         "offset": 1,
-        "description": "Takes the cosine of an angle in radians."
+        "description": "Takes the cosine of an angle in radians.",
+        "argnum": 1
     },
     "tanent_purification": {
         "name": "Tanent Purification",
@@ -996,7 +1070,8 @@
             0
         ],
         "offset": 2,
-        "description": "Takes the tangent of an angle in radians."
+        "description": "Takes the tangent of an angle in radians.",
+        "argnum": 1
     },
     "inverse_sine_purification": {
         "name": "Inverse Sine Purification",
@@ -1011,7 +1086,8 @@
             3
         ],
         "offset": 1,
-        "description": "Takes the inverse sine value of a value bbetween -1 and 1"
+        "description": "Takes the inverse sine value of a value bbetween -1 and 1",
+        "argnum": 1
     },
     "inverse_cosine_purification": {
         "name": "Inverse Cosine Purification",
@@ -1026,10 +1102,11 @@
             5
         ],
         "offset": 5,
-        "description": "Takes the inverse cosine value of a number between -1 and 1"
+        "description": "Takes the inverse cosine value of a number between -1 and 1",
+        "argnum": 1
     },
     "inverse_tangent_purification": {
-        "name": "Takes the inverse tangent of a value",
+        "name": "Inverse Tangent Purification",
         "directions": [
             0,
             1,
@@ -1043,7 +1120,8 @@
             0
         ],
         "offset": 5,
-        "description": "Takes the inverse tangent of a value"
+        "description": "Takes the inverse tangent of a value",
+        "argnum": 1
     },
     "inverse_tangent_distillation": {
         "name": "Inverse Tangent Distillation",
@@ -1062,7 +1140,8 @@
             4
         ],
         "offset": 3,
-        "description": "Takes the inverse tangent of a Y and X value"
+        "description": "Takes the inverse tangent of a Y and X value",
+        "argnum": 1
     },
     "logarithmic_distillation": {
         "name": "Logarithmic Distillation",
@@ -1075,7 +1154,8 @@
             4
         ],
         "offset": 4,
-        "description": "Takes the logarithm with the base on the top of the stack of the number second to the top of the stack."
+        "description": "Takes the logarithm with the base on the top of the stack of the number second to the top of the stack.",
+        "argnum": 2
     },
     "uniqueness_purification": {
         "name": "Uniqueness Purification",
@@ -1089,7 +1169,8 @@
             0
         ],
         "offset": 5,
-        "description": "Removes duplicate entries from a list"
+        "description": "Removes duplicate entries from a list",
+        "argnum": 1
     },
     "hermes_gambit": {
         "name": "Hermes' Gambit",
@@ -1102,7 +1183,8 @@
             5
         ],
         "offset": 1,
-        "description": "Remove a pattern or list of petterns and cast them, escaped patterns get pushed to the stack."
+        "description": "Remove a pattern or list of petterns and cast them, escaped patterns get pushed to the stack.",
+        "argnum": 1
     },
     "iris_gambit": {
         "name": "Iris' Gambit",
@@ -1116,7 +1198,8 @@
             5
         ],
         "offset": 4,
-        "description": "Like Hermes' Gambit, but push a Jump iota that when executed jumps directly to the end of the pattern list."
+        "description": "Like Hermes' Gambit, but push a Jump iota that when executed jumps directly to the end of the pattern list.",
+        "argnum": 1
     },
     "thots_gambit": {
         "name": "Thot's Gambit",
@@ -1129,7 +1212,8 @@
             2
         ],
         "offset": 5,
-        "description": "Cast the list of patterns atthe top of the stack once for every element of the second list. Push Iotas remaining after every element on the main stack"
+        "description": "Cast the list of patterns atthe top of the stack once for every element of the second list. Push Iotas remaining after every element on the main stack",
+        "argnum": 2
     },
     "charons_gambit": {
         "name": "Charon's Gambit",
@@ -1142,7 +1226,8 @@
             1
         ],
         "offset": 2,
-        "description": "Forcibly halts a Hex. Only exits one Iteration of Thot's Gambit"
+        "description": "Forcibly halts a Hex. Only exits one Iteration of Thot's Gambit",
+        "argnum": 0
     },
     "reset": {
         "name": "Reset",
@@ -1154,6 +1239,7 @@
             2
         ],
         "offset": 4,
-        "description": "Resets the game >:3"
+        "description": "Resets the game >:3",
+        "argnum": 0
     }
 }

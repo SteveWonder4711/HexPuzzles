@@ -26,7 +26,8 @@ def checkspells(spells):
             offset = spells[spell]["directions"][0]
             spells[spell]["directions"] = [(direction-offset)%6 for direction in spells[spell]["directions"]]
             print(f"normalised {spells[spell]["name"]}")
-
+        if not "argnum" in spells[spell]:
+            spells[spell]["argnum"] = int(input(f"please input number of arguments for spell {spells[spell]["name"]}"))
 
 def eval_numerical_reflection(directions, startdirection):
     num = 0
@@ -227,23 +228,18 @@ def newspell(currentspells, spelldirections, offset):
 
 def setconnectionsstate(state, gameobj, staffcast):
     if not staffcast:
-        print("not cast by staff, skipping")
-        if len(gameobj.castspells[-1]) == 0:
-            print("nothing to set anyway")
         return
     if len(gameobj.castspells) > 0:
-        print("jup, that one works alright")
-        if len(gameobj.castspells[-1]) == 0:
-            print("nothing to set though")
         for connection in gameobj.castspells[-1]:
             if connection.state == "Drawing":
                 connection.state = state
 
 
 def executespell(currentspell, currentstack, gameobj, staffcast=True):
-    gameobj.castspells.append(gameobj.currentconnections)
-    gameobj.currentconnections = []
-    gameobj.spellerror = False
+    if staffcast:
+        gameobj.castspells.append(gameobj.currentconnections)
+        gameobj.currentconnections = []
+        gameobj.spellerror = False
     offset = currentspell[0]
     normalspell = [(direction-offset)%6 for direction in currentspell]
     if gameobj.consideration:
@@ -258,7 +254,7 @@ def executespell(currentspell, currentstack, gameobj, staffcast=True):
     for spell in gameobj.spells:
         if gameobj.spells[spell]["directions"] == normalspell:
             tocast = spell
-    #Certain spells which need Game Object
+    #Escaping Spells
     if tocast == "consideration":
         gameobj.consideration = True
         setconnectionsstate("Cast", gameobj, staffcast)
@@ -290,9 +286,12 @@ def executespell(currentspell, currentstack, gameobj, staffcast=True):
         gameobj.introspectionlist.append(f"<{''.join([str(direction) for direction in currentspell])}>")
         setconnectionsstate("Considered", gameobj, staffcast)
         return
-    elif tocast is not None: 
-        spellfunction = getattr(spells, tocast)
-        spellfunction(currentstack, gameobj)
+    elif tocast is not None:
+        if len(currentstack) < gameobj.spells[tocast]["argnum"]:
+            gameobj.spellerror = True
+        else:
+            spellfunction = getattr(spells, tocast)
+            spellfunction(currentstack, gameobj)
     else:
         if check_numerical_reflection(normalspell, currentstack):
             setconnectionsstate("Cast", gameobj, staffcast)
@@ -308,6 +307,7 @@ def executespell(currentspell, currentstack, gameobj, staffcast=True):
         else:
             print("there was an error or it was a wrong spell :<")
             setconnectionsstate("Error", gameobj, staffcast)
+            currentstack.append("ERROR")
     else:
         setconnectionsstate("Cast", gameobj, staffcast)
 
