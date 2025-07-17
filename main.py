@@ -208,6 +208,8 @@ def drawstack(currentstack, gamesurface, stacksurface):
         i -= 1
     gamesurface.blit(stacksurface, (32, 32))
 
+def newlevel(currentlevels):
+    levelid = len(currentlevels)
 
 
 def newspell(currentspells, spelldirections, offset):
