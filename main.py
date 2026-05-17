@@ -13,7 +13,8 @@ LINECASTCOLOR = (0, 208, 255)
 LINEERRORCOLOR = (255, 0, 0)
 LINECONSIDEREDCOLOR = (245, 245, 66)
 LINEWIDTH = 7
-ADDSPELLMODE = False 
+ADDSPELLMODE = False
+ADDLEVELMODE = True
 
 
 def checkspells(spells):
@@ -28,6 +29,7 @@ def checkspells(spells):
             print(f"normalised {spells[spell]["name"]}")
         if not "argnum" in spells[spell]:
             spells[spell]["argnum"] = int(input(f"please input number of arguments for spell {spells[spell]["name"]}"))
+
 
 def eval_numerical_reflection(directions, startdirection):
     num = 0
@@ -99,6 +101,7 @@ def check_bookkeeper_gambit(directions, currentstack, gameobj):
         bookkeepindex += 1
     return True
 
+
 def renderpattern(surface, startx, starty, patternstring, maxwidth, maxheight):
     verticaldistance = round(math.sqrt(100*100+50*50)) 
     currentx = 0
@@ -106,6 +109,7 @@ def renderpattern(surface, startx, starty, patternstring, maxwidth, maxheight):
     xpos = [0]
     ypos = [0]
     numbers = patternstring.replace("<", "").replace(">", "")
+    patternlength = len(numbers)
     for number in numbers:
         match number:
             case "0":
@@ -144,10 +148,20 @@ def renderpattern(surface, startx, starty, patternstring, maxwidth, maxheight):
         xof += (maxwidth-patternwidth*scale)/scale/2
     linewidth = 2 if scale > 0.5 else 1
     for i in range(len(xpos)-1):
-        pygame.draw.line(surface, LINEDRAWCOLOR, (startx+(xof+xpos[i])*scale, starty+(yof+ypos[i])*scale), (startx+(xof+xpos[i+1])*scale, starty+(yof+ypos[i+1])*scale), width=linewidth)
-
-                
-
+        color = LINEDRAWCOLOR
+        if Game.directionrender:
+            color = tuple([int(value*(1-i/patternlength)+(255*0.75+value*0.25)*(i/patternlength)) for value in color])
+        linestartx = startx+(xof+xpos[i])*scale
+        linestarty = starty+(yof+ypos[i])*scale
+        lineendx = startx+(xof+xpos[i+1])*scale
+        lineendy = starty+(yof+ypos[i+1])*scale
+        pygame.draw.line(surface, color, (linestartx, linestarty), (lineendx, lineendy), width=linewidth)
+        if Game.directionrender:
+            drawnumber = math.floor(Game.time/5e+8)%min(patternlength, 8)
+            if drawnumber == i%8:
+                portion = Game.time/5e+8%1
+                blinkpos = (lineendx*portion+linestartx*(1-portion), lineendy*portion+linestarty*(1-portion))
+                pygame.draw.circle(surface, (255, 255, 255), blinkpos, (linewidth*scale)+1) 
 
 
 def iotatostring(iota, stacksurface, row, column):
@@ -208,8 +222,24 @@ def drawstack(currentstack, gamesurface, stacksurface):
         i -= 1
     gamesurface.blit(stacksurface, (32, 32))
 
-def newlevel(currentlevels):
-    levelid = len(currentlevels)
+
+def newlevel():
+    levelfile = open("levels.json", "w+")
+    leveljson = json.load(levelfile)
+    levelfile.seek(0)
+    #levelnum = len(leveljson)
+    levelid = input("input level ID:")
+    levelname = input("input level name:")
+    leveldescription = input("input level description:")
+    level = { 
+        "id": levelid,
+        "name": levelname,
+        "description": leveldescription,
+        "inputs": "",
+        "expectedoutputs": "",
+    }
+    leveljson.append(level)
+    levelfile.write(json.dumps(leveljson, indent=2))
 
 
 def newspell(currentspells, spelldirections, offset):
@@ -478,7 +508,7 @@ class App:
  
     def on_init(self):
         pygame.init()
-        if ADDSPELLMODE:
+        if ADDSPELLMODE or ADDLEVELMODE:
             self._display_surf = pygame.display.set_mode((600,400))
         else:
             self._display_surf = pygame.display.set_mode((0,0))
@@ -496,6 +526,8 @@ class App:
         with open("spells.json", "r") as f:
             self.spells = json.load(f)
         checkspells(self.spells)
+        if ADDLEVELMODE:
+            newlevel()
         self.starttime = time.time_ns()
         self.time = 0
         self.currentstack = []

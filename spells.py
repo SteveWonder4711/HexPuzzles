@@ -911,7 +911,7 @@ def inverse_cosine_purification(currentstack, gameobj):
     currentstack.append(math.floor(math.acos(value)*1e+10)/1e+10)
 
 
-#Takes the inverse tangent of a value
+#Inverse Tangent Purification
 #Takes the inverse tangent of a value
 def inverse_tangent_purification(currentstack, gameobj):
     value = currentstack.pop()
